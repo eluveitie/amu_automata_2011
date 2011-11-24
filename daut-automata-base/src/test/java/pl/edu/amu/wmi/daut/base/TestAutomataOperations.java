@@ -273,7 +273,7 @@ public class TestAutomataOperations extends TestCase {
      * Test sprawdza, czy odwracanie automatu działa.
      */
     public final void testInversionA() {
-    	List<String> words = new ArrayList<String>();
+        List<String> words = new ArrayList<String>();
     	words.add("ab");
     	words.add("ba");
     	words.add("caa");
