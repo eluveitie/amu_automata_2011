@@ -315,7 +315,7 @@ public class TestAutomataOperations extends TestCase {
         }
 
         for (String word : wordsToAccept) {
-            System.Out.Writeln("Testuje " + word);
+            System.out.println("Testuje " + word);
             assertTrue(reversedAutomaton.accepts(word));
         }
         for (String word : wordsToReject) {
