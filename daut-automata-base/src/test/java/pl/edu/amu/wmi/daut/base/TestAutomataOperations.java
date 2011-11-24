@@ -269,7 +269,7 @@ public class TestAutomataOperations extends TestCase {
         assertFalse(automaton.accepts(""));
     }
 
-	 /**
+     /**
      * Test sprawdza, czy odwracanie automatu działa.
      */
     public final void testInversionA() {
