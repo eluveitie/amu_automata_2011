@@ -297,6 +297,8 @@ public class TestAutomataOperations extends TestCase {
         automatonA.markAsFinal(q1);
 
         AutomatonSpecification automatonB = AutomataOperations.reverseLanguageAutomat(automatonA);
+        System.out.println("Automat wyglada tak: ");
+        System.out.println(automatonB.getDotGraph());
 
         NondeterministicAutomatonByThompsonApproach originalAutomaton = new
                 NondeterministicAutomatonByThompsonApproach(automatonA);
@@ -384,6 +386,8 @@ public class TestAutomataOperations extends TestCase {
         automatonA.markAsFinal(q3);
 
         AutomatonSpecification automatonB = AutomataOperations.reverseLanguageAutomat(automatonA);
+        System.out.println("Automat wyglada tak: ");
+        System.out.println(automatonB.getDotGraph());
 
         NondeterministicAutomatonByThompsonApproach originalAutomaton = new
                 NondeterministicAutomatonByThompsonApproach(automatonA);
@@ -401,7 +405,7 @@ public class TestAutomataOperations extends TestCase {
             else
                 wordsToReject.add(reversedWord);
         }
-
+        
         for (String word : wordsToAccept) {
         	System.out.println("Testuje " + word + " (powinno przejsc)");
             assertTrue(reversedAutomaton.accepts(word));
