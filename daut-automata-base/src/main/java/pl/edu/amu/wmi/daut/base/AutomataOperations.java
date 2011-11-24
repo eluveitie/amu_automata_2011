@@ -12,7 +12,7 @@ import java.util.Map;
 public class AutomataOperations {
 
     /**
-     * Klasa reprezentuje stan C powstaly poprzez polaczenie stan√lw A i B w wyniku operacji
+     * Klasa reprezentuje stan C powstaly poprzez polaczenie stanow A i B w wyniku operacji
      * intersection.
      */
     private static final class CombinedState {
