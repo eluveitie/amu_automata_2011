@@ -75,7 +75,7 @@ public class AutomataOperations {
             //jesli stan jest koncowym, utworz polaczenie z jedynym mozliwym stanem poczatkowym przez epsilon.
             else if (parentAutomaton.isFinal(parentState)) {
                 EpsilonTransitionLabel eps = new EpsilonTransitionLabel();
-                childAutomaton.addTransition(childState, initialChildState, eps);
+                childAutomaton.addTransition(initialChildState, childState, eps);
             }
         }
         
