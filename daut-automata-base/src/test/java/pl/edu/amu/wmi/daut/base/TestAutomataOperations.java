@@ -273,7 +273,7 @@ public class TestAutomataOperations extends TestCase {
      * Test sprawdza, czy odwracanie automatu działa.
      */
     public final void testInversionA() {
-    	System.out.println("testInversionA start");
+        System.out.println("testInversionA start");
         List<String> words = new ArrayList<String>();
         words.add("ab");
         words.add("ba");
@@ -322,7 +322,7 @@ public class TestAutomataOperations extends TestCase {
             assertTrue(reversedAutomaton.accepts(word));
         }
         for (String word : wordsToReject) {
-        	System.out.println("Testuje " + word + " (nie powinno przejsc)");
+            System.out.println("Testuje " + word + " (nie powinno przejsc)");
             assertFalse(reversedAutomaton.accepts(word));
         }
         System.out.println("testInversionA koniec");
@@ -332,7 +332,7 @@ public class TestAutomataOperations extends TestCase {
      * Test sprawdza, czy odwracanie automatu działa (B).
      */
     public final void testInversionB() {
-    	System.out.println("testInversionB start");
+        System.out.println("testInversionB start");
         List<String> words = new ArrayList<String>();
         words.add("cb");
         words.add("bc");
@@ -405,13 +405,13 @@ public class TestAutomataOperations extends TestCase {
             else
                 wordsToReject.add(reversedWord);
         }
-        
+
         for (String word : wordsToAccept) {
-        	System.out.println("Testuje " + word + " (powinno przejsc)");
+            System.out.println("Testuje " + word + " (powinno przejsc)");
             assertTrue(reversedAutomaton.accepts(word));
         }
         for (String word : wordsToReject) {
-        	System.out.println("Testuje " + word + " (nie powinno przejsc)");
+            System.out.println("Testuje " + word + " (nie powinno przejsc)");
             assertFalse(reversedAutomaton.accepts(word));
         }
         System.out.println("testInversionB koniec");

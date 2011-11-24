@@ -46,56 +46,56 @@ public class AutomataOperations {
             NaiveAutomatonSpecification parentAutomaton) {
 
         NaiveAutomatonSpecification childAutomaton = new NaiveAutomatonSpecification();
-        
+
         if (parentAutomaton.isEmpty()) { return childAutomaton; }
 
         List<State> parentStates = new ArrayList<State>();
         List<State> childStates = new ArrayList<State>();
         parentStates.addAll(parentAutomaton.allStates());
 
-        //utworz sztucznie stan poczatkowy. bedzie laczony przez epsilon ze stanami koncowymi automatu wejsciowego.
+        //utworz sztucznie stan poczatkowy.
+        //bedzie laczony przez epsilon ze stanami koncowymi automatu wejsciowego.
         State initialChildState = childAutomaton.addState(); 
         childStates.add(initialChildState);
         childAutomaton.markAsInitial(initialChildState);
-        
-        //zadeklaruj tabelke translacji stanow z automatu wejsciowego na stany z automatu wyjsciowego.
+
+        //zadeklaruj tabelke translacji stanow z automatu wejsciowego
+        //na stany z automatu wyjsciowego.
         Map<State, State> parentToSonStates = new HashMap<State, State>();
 
         //krok 1. utworz stany, oraz zaznacz je jako poczatkowe lub koncowe.
-        for (State parentState : parentStates)
-        {
-        	State childState = childAutomaton.addState();
+        for (State parentState : parentStates) {
+            State childState = childAutomaton.addState();
             childStates.add(childState);
             //dodaj do tabelki translacji stanow
             parentToSonStates.put(parentState, childState);
-            
+
             //jesli stan jest poczatkowym, zaznacz go jako koncowy. 
             if (parentState == parentAutomaton.getInitialState())
-            	childAutomaton.markAsFinal(childStates.get(childStates.size() - 1));
-            //jesli stan jest koncowym, utworz polaczenie z jedynym mozliwym stanem poczatkowym przez epsilon.
+                childAutomaton.markAsFinal(childStates.get(childStates.size() - 1));
+            //jesli stan jest koncowym, utworz polaczenie z jedynym mozliwym stanem poczatkowym.
             else if (parentAutomaton.isFinal(parentState)) {
                 EpsilonTransitionLabel eps = new EpsilonTransitionLabel();
                 childAutomaton.addTransition(initialChildState, childState, eps);
             }
         }
-        
+
         //krok 2. utworz krawedzie.
         //z kazdego stanu w automacie wejsciowym...
-        for (State parentState : parentStates)
-        {
-        	//pobierz kazda wychodzaca krawedz...
-        	for (OutgoingTransition parentTransition : parentAutomaton.allOutgoingTransitions(parentState))
-        	{
-        		//pobierz stan wyjsciowy z krawedzi
-        		State targetState = parentTransition.getTargetState();
-        		//pobierz z tabelki translacji stanow stany: wejsciowy i poczatkowy
-        		State childStateFrom = parentToSonStates.get(parentState);
-        		State childStateTo = parentToSonStates.get(targetState);
-        		//dodaj do listy krawedzi krawedz miedzy stanami w kierunku odwrotnym niz oryginalny
-        		childAutomaton.addTransition(childStateTo, childStateFrom, parentTransition.getTransitionLabel());
-        	}
+        for (State parentState : parentStates) {
+            //pobierz kazda wychodzaca krawedz...
+            for (OutgoingTransition parentTransition :
+                parentAutomaton.allOutgoingTransitions(parentState)) {
+                //pobierz stan wyjsciowy z krawedzi
+                State targetState = parentTransition.getTargetState();
+                //pobierz z tabelki translacji stanow stany: wejsciowy i poczatkowy
+                State childStateFrom = parentToSonStates.get(parentState);
+                State childStateTo = parentToSonStates.get(targetState);
+                //dodaj do listy krawedzi krawedz miedzy stanami w kierunku odwrotnym niz oryginalny
+                childAutomaton.addTransition(childStateTo, childStateFrom, parentTransition.getTransitionLabel());
+            }
         }
-        
+
         return childAutomaton;
     }
 
