@@ -273,6 +273,7 @@ public class TestAutomataOperations extends TestCase {
      * Test sprawdza, czy odwracanie automatu działa.
      */
     public final void testInversionA() {
+    	System.out.println("testInversionA start");
         List<String> words = new ArrayList<String>();
         words.add("ab");
         words.add("ba");
@@ -322,12 +323,14 @@ public class TestAutomataOperations extends TestCase {
         	System.out.println("Testuje " + word + " (nie powinno przejsc)");
             assertFalse(reversedAutomaton.accepts(word));
         }
+        System.out.println("testInversionA koniec");
     }
 
     /**
      * Test sprawdza, czy odwracanie automatu działa (B).
      */
     public final void testInversionB() {
+    	System.out.println("testInversionB start");
         List<String> words = new ArrayList<String>();
         words.add("cb");
         words.add("bc");
@@ -357,6 +360,16 @@ public class TestAutomataOperations extends TestCase {
         words.add("b");
         words.add("c");
         words.add("");
+        words.add("cb");
+        words.add("cab");
+        words.add("caab");
+        words.add("bc");
+        words.add("bac");
+        words.add("baac");
+        words.add("aac");
+        words.add("aab");
+        words.add("caa");
+        words.add("baa");
 
         NaiveAutomatonSpecification automatonA = new NaiveAutomatonSpecification();
         State q0 = automatonA.addState();
@@ -397,5 +410,6 @@ public class TestAutomataOperations extends TestCase {
         	System.out.println("Testuje " + word + " (nie powinno przejsc)");
             assertFalse(reversedAutomaton.accepts(word));
         }
+        System.out.println("testInversionB koniec");
     }
 }
