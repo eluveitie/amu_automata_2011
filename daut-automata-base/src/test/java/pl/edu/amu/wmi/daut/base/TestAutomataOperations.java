@@ -268,7 +268,7 @@ public class TestAutomataOperations extends TestCase {
         assertFalse(automaton.accepts("aaabbbb"));
         assertFalse(automaton.accepts(""));
     }
-	
+
 	 /**
      * Test sprawdza, czy odwracanie automatu działa.
      */
@@ -285,7 +285,7 @@ public class TestAutomataOperations extends TestCase {
     	words.add("a");
     	words.add("b");
     	words.add("");
-    	
+
     	NaiveAutomatonSpecification automatonA = new NaiveAutomatonSpecification();
     	State q0 = automatonA.addState();
         State q1 = automatonA.addState();
@@ -294,37 +294,34 @@ public class TestAutomataOperations extends TestCase {
         automatonA.addLoop(q1, new CharTransitionLabel('b'));
         automatonA.markAsInitial(q0);
         automatonA.markAsFinal(q1);
-        
+
         AutomatonSpecification automatonB = AutomataOperations.reverseLanguageAutomat(automatonA);
-        
+
         NondeterministicAutomatonByThompsonApproach originalAutomaton = new
                 NondeterministicAutomatonByThompsonApproach(automatonA);
-        
+
         NondeterministicAutomatonByThompsonApproach reversedAutomaton = new
                 NondeterministicAutomatonByThompsonApproach(automatonB);
-        
+
         List<String> wordsToAccept = new ArrayList<String>();
         List<String> wordsToReject = new ArrayList<String>();
-        
-    	for (String word : words)
-    	{
+
+    	for (String word : words) {
     		String reversedWord = new StringBuffer(word).reverse().toString();
     		if (originalAutomaton.accepts(word))
     			wordsToAccept.add(reversedWord);
     		else
     			wordsToReject.add(reversedWord);
     	}
-    	
-    	for (String word : wordsToAccept)
-    	{
+
+    	for (String word : wordsToAccept) {
     		assertTrue(reversedAutomaton.accepts(word));
     	}
-    	for (String word : wordsToReject)
-    	{
+    	for (String word : wordsToReject) {
     		assertFalse(reversedAutomaton.accepts(word));
     	}
     }
-    
+
     /**
      * Test sprawdza, czy odwracanie automatu działa (B).
      */
@@ -358,7 +355,7 @@ public class TestAutomataOperations extends TestCase {
     	words.add("b");
     	words.add("c");
     	words.add("");
-    	
+
     	NaiveAutomatonSpecification automatonA = new NaiveAutomatonSpecification();
     	State q0 = automatonA.addState();
     	State q1 = automatonA.addState();
@@ -370,33 +367,30 @@ public class TestAutomataOperations extends TestCase {
     	automatonA.addTransition(q2, q3, new CharTransitionLabel('b'));
     	automatonA.markAsInitial(q0);
         automatonA.markAsFinal(q3);
-        
+
         AutomatonSpecification automatonB = AutomataOperations.reverseLanguageAutomat(automatonA);
-        
+
         NondeterministicAutomatonByThompsonApproach originalAutomaton = new
                 NondeterministicAutomatonByThompsonApproach(automatonA);
-        
+
         NondeterministicAutomatonByThompsonApproach reversedAutomaton = new
                 NondeterministicAutomatonByThompsonApproach(automatonB);
-        
+
         List<String> wordsToAccept = new ArrayList<String>();
         List<String> wordsToReject = new ArrayList<String>();
-        
-    	for (String word : words)
-    	{
+
+    	for (String word : words) {
     		String reversedWord = new StringBuffer(word).reverse().toString();
     		if (originalAutomaton.accepts(word))
     			wordsToAccept.add(reversedWord);
     		else
     			wordsToReject.add(reversedWord);
     	}
-    	
-    	for (String word : wordsToAccept)
-    	{
+
+    	for (String word : wordsToAccept) {
     		assertTrue(reversedAutomaton.accepts(word));
     	}
-    	for (String word : wordsToReject)
-    	{
+    	for (String word : wordsToReject) {
     		assertFalse(reversedAutomaton.accepts(word));
     	}
     }
