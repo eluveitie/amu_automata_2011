@@ -41,7 +41,7 @@ public class AutomataOperations {
      *Metoda zwraca automat akceptujący odwrócenie języka,
      * akceptowanego przez dany automat "parent".
      */
-    public AutomatonSpecification reverseLanguageAutomat(
+    public static AutomatonSpecification reverseLanguageAutomat(
             NaiveAutomatonSpecification parent) {
 
         NaiveAutomatonSpecification son = new NaiveAutomatonSpecification();
