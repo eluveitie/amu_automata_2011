@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Klasa zwierajÄ…ca operacje na automatach.
@@ -42,56 +43,60 @@ public class AutomataOperations {
      * akceptowanego przez dany automat "parent".
      */
     public static AutomatonSpecification reverseLanguageAutomat(
-            NaiveAutomatonSpecification parent) {
+            NaiveAutomatonSpecification parentAutomaton) {
 
-        NaiveAutomatonSpecification son = new NaiveAutomatonSpecification();
+        NaiveAutomatonSpecification childAutomaton = new NaiveAutomatonSpecification();
+        
+        if (parentAutomaton.isEmpty()) { return childAutomaton; }
 
-        if (parent.isEmpty()) { return son; }
+        List<State> parentStates = new ArrayList<State>();
+        List<State> childStates = new ArrayList<State>();
+        parentStates.addAll(parentAutomaton.allStates());
 
-        List<State> pstates = new ArrayList<State>();
-        List<State> sstates = new ArrayList<State>();
-        pstates.addAll(parent.allStates());
+        //utwórz sztucznie stan pocz¹tkowy. bêdzie ³¹czony przez epsilon ze stanami koñcowymi automatu wejœciowego.
+        State initialChildState = childAutomaton.addState(); 
+        childStates.add(initialChildState);
+        childAutomaton.markAsInitial(initialChildState);
+        
+        //zadeklaruj tabelkê translacji stanów z automatu wejœciowego na stany z automatu wyjœciowego.
+        Map<State, State> parentToSonStates = new HashMap<State, State>();
 
-        List<OutgoingTransition> outtransitions =
-                new ArrayList<OutgoingTransition>();
-
-        sstates.add(son.addState());
-        son.markAsInitial(sstates.get(0));
-
-        for (State state : pstates) {
-            sstates.add(son.addState());
-            if (state == parent.getInitialState())
-                son.markAsFinal(sstates.get(sstates.size() - 1));
-            else if (parent.isFinal(state)) {
+        //krok 1. utwórz stany, oraz zaznacz je jako pocz¹tkowe lub koñcowe.
+        for (State parentState : parentStates)
+        {
+        	State childState = childAutomaton.addState();
+            childStates.add(childState);
+            //dodaj do tabelki translacji stanów
+            parentToSonStates.put(parentState, childState);
+            
+            //jeœli stan jest pocz¹tkowym, zaznacz go jako koñcowy. 
+            if (parentState == parentAutomaton.getInitialState())
+            	childAutomaton.markAsFinal(childStates.get(childStates.size() - 1));
+            //jeœli stan jest koñcowym, utwórz po³¹czenie z jedynym mo¿liwym stanem poczatkowym przez epsilon.
+            else if (parentAutomaton.isFinal(parentState)) {
                 EpsilonTransitionLabel eps = new EpsilonTransitionLabel();
-                son.addTransition(
-                        sstates.get(0), sstates.get(sstates.size() - 1), eps);
-            }
-
-            outtransitions.addAll(parent.allOutgoingTransitions(state));
-
-            for (OutgoingTransition outtransition : outtransitions) {
-
-                State targetstate = outtransition.getTargetState();
-                State currentstate = null;
-                boolean exist = false;
-                for (State tmpstate : son.allStates()) {
-                    if (tmpstate == targetstate) {
-                        exist = true; currentstate = tmpstate; break;
-                    }
-                }
-                if (exist)
-                    son.addTransition(
-                            targetstate, currentstate, outtransition.getTransitionLabel());
-                else {
-                    sstates.add(son.addState());
-                    son.addTransition(targetstate, sstates.get(sstates.size() - 1),
-                            outtransition.getTransitionLabel());
-                }
+                childAutomaton.addTransition(childState, initialChildState, eps);
             }
         }
-
-        return son;
+        
+        //krok 2. utwórz krawêdzie.
+        //z ka¿dego stanu w automacie wejœciowym...
+        for (State parentState : parentStates)
+        {
+        	//pobierz ka¿d¹ wychodz¹c¹ krawêdŸ...
+        	for (OutgoingTransition parentTransition : parentAutomaton.allOutgoingTransitions(parentState))
+        	{
+        		//pobierz stan wyjœciowy z krawêdzi
+        		State targetState = parentTransition.getTargetState();
+        		//pobierz z tabelki translacji stanów stany: wejœciowy i pocz¹tkowy
+        		State childStateFrom = parentToSonStates.get(parentState);
+        		State childStateTo = parentToSonStates.get(targetState);
+        		//dodaj do listy krawêdzi krawêdŸ miêdzy stanami w kierunku odwrotnym ni¿ oryginalny
+        		childAutomaton.addTransition(childStateTo, childStateFrom, parentTransition.getTransitionLabel());
+        	}
+        }
+        
+        return childAutomaton;
     }
 
     /**
