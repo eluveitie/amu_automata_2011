@@ -7,18 +7,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Klasa zwierająca operacje na automatach.
+ * Klasa zwierajeca operacje na automatach.
  */
 public class AutomataOperations {
 
     /**
-     * Klasa reprezentuje stan C powstały poprzez połączenie stan�lw A i B w wyniku operacji
+     * Klasa reprezentuje stan C powstaly poprzez polaczenie stan�lw A i B w wyniku operacji
      * intersection.
      */
     private static final class CombinedState {
 
         /**
-         * Przypisuje stanowi C jego składowe stany A i B.
+         * Przypisuje stanowi C jego skladowe stany A i B.
          */
         public void set(State a, State b) {
             qA = a;
@@ -39,7 +39,7 @@ public class AutomataOperations {
     }
 
     /**
-     *Metoda zwraca automat akceptujący odwr�lcenie języka,
+     *Metoda zwraca automat akceptujacy odwrocenie jezyka,
      * akceptowanego przez dany automat "parent".
      */
     public static AutomatonSpecification reverseLanguageAutomat(
@@ -102,7 +102,7 @@ public class AutomataOperations {
     /**
      * Metoda tworzy przejscie od stanu stateC do nowego stanu utworzonego przez pare A i B w
      * combinedC po etykiecie transition. Dodanie nowo utworzonego stanu stateCn do listy newStates
-     * wraz z wpisaniem jej oraz jej kombinacji stan�lw do HashMap.
+     * wraz z wpisaniem jej oraz jej kombinacji stanow do HashMap.
      * hashMaps - 0 - statesC, 1 - statesCHandle, 2 - combinedStatesC
      */
     private static boolean makeTransition(CombinedState combinedC, List newStates,
@@ -127,7 +127,7 @@ public class AutomataOperations {
         return empty;
     }
     /**
-     * Metoda zwracająca automat akceptujący przecięcie język�lw akceptowanych przez
+     * Metoda zwracajaca automat akceptujacy przeciecie jezykow akceptowanych przez
      * dwa podane automaty.
      */
     public static AutomatonSpecification intersection(
@@ -151,10 +151,10 @@ public class AutomataOperations {
         newStates.add(qC);
 
         /*
-         * combinedStatesC - zawiera łańcuch kontrolny odpowiadający kombinacji stan�lw A i B
-         * statesC - zawiera stan C z łańcuchem kobminacji jego stan�lw A i B
-         * statesCHandle - zawiera uchwyt do stanu C poprzez łańcuch kontrolny jego kombinacji
-         * stan�lw A i B
+         * combinedStatesC - zawiera lancuch kontrolny odpowiadajacy kombinacji stanow A i B
+         * statesC - zawiera stan C z lancuchem kobminacji jego stanow A i B
+         * statesCHandle - zawiera uchwyt do stanu C poprzez lancuch kontrolny jego kombinacji
+         * stanow A i B
          */
         HashMap<String, CombinedState> combinedStatesC = new HashMap<String, CombinedState>();
         HashMap<State, String> statesC = new HashMap<State, String>();
@@ -237,8 +237,8 @@ public class AutomataOperations {
         return automatonC;
     }
     /**
-     * Zwraca automat akceptujący domknięcie Kleene'ego
-     * języka akceptowanego przez dany automat.
+     * Zwraca automat akceptujacy domkniecie Kleene'ego
+     * jezyka akceptowanego przez dany automat.
      */
     public AutomatonSpecification getKleeneStar(AutomatonSpecification automaton) {
         AutomatonSpecification kleeneautomaton = new NaiveAutomatonSpecification();
