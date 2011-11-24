@@ -274,20 +274,20 @@ public class TestAutomataOperations extends TestCase {
      */
     public final void testInversionA() {
         List<String> words = new ArrayList<String>();
-    	words.add("ab");
-    	words.add("ba");
-    	words.add("caa");
-    	words.add("bbba");
-    	words.add("bbb");
-    	words.add("bab");
-    	words.add("abb");
-    	words.add("aaa");
-    	words.add("a");
-    	words.add("b");
-    	words.add("");
+        words.add("ab");
+        words.add("ba");
+        words.add("caa");
+        words.add("bbba");
+        words.add("bbb");
+        words.add("bab");
+        words.add("abb");
+        words.add("aaa");
+        words.add("a");
+        words.add("b");
+        words.add("");
 
-    	NaiveAutomatonSpecification automatonA = new NaiveAutomatonSpecification();
-    	State q0 = automatonA.addState();
+        NaiveAutomatonSpecification automatonA = new NaiveAutomatonSpecification();
+        State q0 = automatonA.addState();
         State q1 = automatonA.addState();
         automatonA.addTransition(q0, q1, new CharTransitionLabel('a'));
         automatonA.addLoop(q1, new CharTransitionLabel('a'));
@@ -306,66 +306,66 @@ public class TestAutomataOperations extends TestCase {
         List<String> wordsToAccept = new ArrayList<String>();
         List<String> wordsToReject = new ArrayList<String>();
 
-    	for (String word : words) {
-    		String reversedWord = new StringBuffer(word).reverse().toString();
-    		if (originalAutomaton.accepts(word))
-    			wordsToAccept.add(reversedWord);
-    		else
-    			wordsToReject.add(reversedWord);
-    	}
+        for (String word : words) {
+            String reversedWord = new StringBuffer(word).reverse().toString();
+            if (originalAutomaton.accepts(word))
+                wordsToAccept.add(reversedWord);
+            else
+                wordsToReject.add(reversedWord);
+        }
 
-    	for (String word : wordsToAccept) {
-    		assertTrue(reversedAutomaton.accepts(word));
-    	}
-    	for (String word : wordsToReject) {
-    		assertFalse(reversedAutomaton.accepts(word));
-    	}
+        for (String word : wordsToAccept) {
+            assertTrue(reversedAutomaton.accepts(word));
+        }
+        for (String word : wordsToReject) {
+            assertFalse(reversedAutomaton.accepts(word));
+        }
     }
 
     /**
      * Test sprawdza, czy odwracanie automatu działa (B).
      */
     public final void testInversionB() {
-    	List<String> words = new ArrayList<String>();
-    	words.add("cb");
-    	words.add("bc");
-    	words.add("bab");
-    	words.add("bac");
-    	words.add("cba");
-    	words.add("cbb");
-    	words.add("aaa");
-    	words.add("aab");
-    	words.add("aac");
-    	words.add("aba");
-    	words.add("abb");
-    	words.add("abc");
-    	words.add("aca");
-    	words.add("acb");
-    	words.add("acc");
-    	words.add("aa");
-    	words.add("ab");
-    	words.add("ac");
-    	words.add("ba");
-    	words.add("bb");
-    	words.add("bc");
-    	words.add("ca");
-    	words.add("cb");
-    	words.add("cc");
-    	words.add("a");
-    	words.add("b");
-    	words.add("c");
-    	words.add("");
+        List<String> words = new ArrayList<String>();
+        words.add("cb");
+        words.add("bc");
+        words.add("bab");
+        words.add("bac");
+        words.add("cba");
+        words.add("cbb");
+        words.add("aaa");
+        words.add("aab");
+        words.add("aac");
+        words.add("aba");
+        words.add("abb");
+        words.add("abc");
+        words.add("aca");
+        words.add("acb");
+        words.add("acc");
+        words.add("aa");
+        words.add("ab");
+        words.add("ac");
+        words.add("ba");
+        words.add("bb");
+        words.add("bc");
+        words.add("ca");
+        words.add("cb");
+        words.add("cc");
+        words.add("a");
+        words.add("b");
+        words.add("c");
+        words.add("");
 
-    	NaiveAutomatonSpecification automatonA = new NaiveAutomatonSpecification();
-    	State q0 = automatonA.addState();
-    	State q1 = automatonA.addState();
-    	State q2 = automatonA.addState();
-    	State q3 = automatonA.addState();
+        NaiveAutomatonSpecification automatonA = new NaiveAutomatonSpecification();
+        State q0 = automatonA.addState();
+        State q1 = automatonA.addState();
+        State q2 = automatonA.addState();
+        State q3 = automatonA.addState();
         automatonA.addTransition(q0, q1, new CharTransitionLabel('c'));
-    	automatonA.addTransition(q1, q2, new CharTransitionLabel('a'));
-    	automatonA.addLoop(q2, new CharTransitionLabel('a'));
-    	automatonA.addTransition(q2, q3, new CharTransitionLabel('b'));
-    	automatonA.markAsInitial(q0);
+        automatonA.addTransition(q1, q2, new CharTransitionLabel('a'));
+        automatonA.addLoop(q2, new CharTransitionLabel('a'));
+        automatonA.addTransition(q2, q3, new CharTransitionLabel('b'));
+        automatonA.markAsInitial(q0);
         automatonA.markAsFinal(q3);
 
         AutomatonSpecification automatonB = AutomataOperations.reverseLanguageAutomat(automatonA);
@@ -379,19 +379,19 @@ public class TestAutomataOperations extends TestCase {
         List<String> wordsToAccept = new ArrayList<String>();
         List<String> wordsToReject = new ArrayList<String>();
 
-    	for (String word : words) {
-    		String reversedWord = new StringBuffer(word).reverse().toString();
-    		if (originalAutomaton.accepts(word))
-    			wordsToAccept.add(reversedWord);
-    		else
-    			wordsToReject.add(reversedWord);
-    	}
+        for (String word : words) {
+            String reversedWord = new StringBuffer(word).reverse().toString();
+            if (originalAutomaton.accepts(word))
+                wordsToAccept.add(reversedWord);
+            else
+                wordsToReject.add(reversedWord);
+        }
 
-    	for (String word : wordsToAccept) {
-    		assertTrue(reversedAutomaton.accepts(word));
-    	}
-    	for (String word : wordsToReject) {
-    		assertFalse(reversedAutomaton.accepts(word));
-    	}
+        for (String word : wordsToAccept) {
+            assertTrue(reversedAutomaton.accepts(word));
+        }
+        for (String word : wordsToReject) {
+            assertFalse(reversedAutomaton.accepts(word));
+        }
     }
 }
