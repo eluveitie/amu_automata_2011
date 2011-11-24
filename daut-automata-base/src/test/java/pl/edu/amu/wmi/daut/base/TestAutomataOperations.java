@@ -315,10 +315,11 @@ public class TestAutomataOperations extends TestCase {
         }
 
         for (String word : wordsToAccept) {
-            System.out.println("Testuje " + word);
+            System.out.println("Testuje " + word + " (powinno przejsc)");
             assertTrue(reversedAutomaton.accepts(word));
         }
         for (String word : wordsToReject) {
+        	System.out.println("Testuje " + word + " (nie powinno przejsc)");
             assertFalse(reversedAutomaton.accepts(word));
         }
     }
@@ -389,9 +390,11 @@ public class TestAutomataOperations extends TestCase {
         }
 
         for (String word : wordsToAccept) {
+        	System.out.println("Testuje " + word + " (powinno przejsc)");
             assertTrue(reversedAutomaton.accepts(word));
         }
         for (String word : wordsToReject) {
+        	System.out.println("Testuje " + word + " (nie powinno przejsc)");
             assertFalse(reversedAutomaton.accepts(word));
         }
     }
