@@ -55,7 +55,7 @@ public class AutomataOperations {
 
         //utworz sztucznie stan poczatkowy.
         //bedzie laczony przez epsilon ze stanami koncowymi automatu wejsciowego.
-        State initialChildState = childAutomaton.addState(); 
+        State initialChildState = childAutomaton.addState();
         childStates.add(initialChildState);
         childAutomaton.markAsInitial(initialChildState);
 
@@ -70,7 +70,7 @@ public class AutomataOperations {
             //dodaj do tabelki translacji stanow
             parentToSonStates.put(parentState, childState);
 
-            //jesli stan jest poczatkowym, zaznacz go jako koncowy. 
+            //jesli stan jest poczatkowym, zaznacz go jako koncowy.
             if (parentState == parentAutomaton.getInitialState())
                 childAutomaton.markAsFinal(childStates.get(childStates.size() - 1));
             //jesli stan jest koncowym, utworz polaczenie z jedynym mozliwym stanem poczatkowym.
@@ -84,15 +84,16 @@ public class AutomataOperations {
         //z kazdego stanu w automacie wejsciowym...
         for (State parentState : parentStates) {
             //pobierz kazda wychodzaca krawedz...
-            for (OutgoingTransition parentTransition :
-                parentAutomaton.allOutgoingTransitions(parentState)) {
+            for (OutgoingTransition parentTransition
+                : parentAutomaton.allOutgoingTransitions(parentState)) {
                 //pobierz stan wyjsciowy z krawedzi
                 State targetState = parentTransition.getTargetState();
                 //pobierz z tabelki translacji stanow stany: wejsciowy i poczatkowy
                 State childStateFrom = parentToSonStates.get(parentState);
                 State childStateTo = parentToSonStates.get(targetState);
                 //dodaj do listy krawedzi krawedz miedzy stanami w kierunku odwrotnym niz oryginalny
-                childAutomaton.addTransition(childStateTo, childStateFrom, parentTransition.getTransitionLabel());
+                childAutomaton.addTransition(childStateTo,
+                    childStateFrom, parentTransition.getTransitionLabel());
             }
         }
 
