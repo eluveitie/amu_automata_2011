@@ -1,4 +1,4 @@
-package pl.edu.amu.wmi.daut.base;
+ï»¿package pl.edu.amu.wmi.daut.base;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -7,18 +7,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Klasa zwieraj¹ca operacje na automatach.
+ * Klasa zwierajÄ…ca operacje na automatach.
  */
 public class AutomataOperations {
 
     /**
-     * Klasa reprezentuje stan C powsta³y poprzez po³¹czenie stanów A i B w wyniku operacji
+     * Klasa reprezentuje stan C powstaÅ‚y poprzez poÅ‚Ä…czenie stanÃ³w A i B w wyniku operacji
      * intersection.
      */
     private static final class CombinedState {
 
         /**
-         * Przypisuje stanowi C jego sk³adowe stany A i B.
+         * Przypisuje stanowi C jego skÅ‚adowe stany A i B.
          */
         public void set(State a, State b) {
             qA = a;
@@ -39,7 +39,7 @@ public class AutomataOperations {
     }
 
     /**
-     *Metoda zwraca automat akceptuj¹cy odwrócenie jezyka,
+     *Metoda zwraca automat akceptujÄ…cy odwrÃ³cenie jezyka,
      * akceptowanego przez dany automat "parent".
      */
     public static AutomatonSpecification reverseLanguageAutomat(
@@ -53,45 +53,45 @@ public class AutomataOperations {
         List<State> childStates = new ArrayList<State>();
         parentStates.addAll(parentAutomaton.allStates());
 
-        //utwórz sztucznie stan pocz¹tkowy.
-        //bedzie ³¹czony przez epsilon ze stanami koñcowymi automatu wejœciowego.
+        //utwÃ³rz sztucznie stan poczÄ…tkowy.
+        //bedzie Å‚Ä…czony przez epsilon ze stanami koÅ„cowymi automatu wejÅ›ciowego.
         State initialChildState = childAutomaton.addState();
         childStates.add(initialChildState);
         childAutomaton.markAsInitial(initialChildState);
 
-        //zadeklaruj tabelkê translacji stanów z automatu wejœciowego
-        //na stany z automatu wyjœciowego.
+        //zadeklaruj tabelkÄ™ translacji stanÃ³w z automatu wejÅ›ciowego
+        //na stany z automatu wyjÅ›ciowego.
         Map<State, State> parentToSonStates = new HashMap<State, State>();
 
-        //krok 1. utwórz stany, oraz zaznacz je jako pocz¹tkowe lub koñcowe.
+        //krok 1. utwÃ³rz stany, oraz zaznacz je jako poczÄ…tkowe lub koÅ„cowe.
         for (State parentState : parentStates) {
             State childState = childAutomaton.addState();
             childStates.add(childState);
-            //dodaj do tabelki translacji stanów
+            //dodaj do tabelki translacji stanÃ³w
             parentToSonStates.put(parentState, childState);
 
-            //jesli stan jest pocz¹tkowym, zaznacz go jako koñcowy.
+            //jesli stan jest poczÄ…tkowym, zaznacz go jako koÅ„cowy.
             if (parentState == parentAutomaton.getInitialState())
                 childAutomaton.markAsFinal(childStates.get(childStates.size() - 1));
-            //jesli stan jest koñcowym, utwórz po³¹czenie z jedynym mo¿liwym stanem pocz¹tkowym.
+            //jesli stan jest koÅ„cowym, utwÃ³rz poÅ‚Ä…czenie z jedynym moÅ¼liwym stanem poczÄ…tkowym.
             else if (parentAutomaton.isFinal(parentState)) {
                 EpsilonTransitionLabel eps = new EpsilonTransitionLabel();
                 childAutomaton.addTransition(initialChildState, childState, eps);
             }
         }
 
-        //krok 2. utwórz krawêdzie.
-        //z ka¿dego stanu w automacie wejœciowym...
+        //krok 2. utwÃ³rz krawÄ™dzie.
+        //z kaÅ¼dego stanu w automacie wejÅ›ciowym...
         for (State parentState : parentStates) {
-            //pobierz ka¿d¹ wychodz¹ca krawêdŸ...
+            //pobierz kaÅ¼dÄ… wychodzÄ…ca krawÄ™dÅº...
             for (OutgoingTransition parentTransition
                 : parentAutomaton.allOutgoingTransitions(parentState)) {
-                //pobierz stan wyjœciowy z krawêdzi
+                //pobierz stan wyjÅ›ciowy z krawÄ™dzi
                 State targetState = parentTransition.getTargetState();
-                //pobierz z tabelki translacji stanów stany: wejœciowy i pocz¹tkowy
+                //pobierz z tabelki translacji stanÃ³w stany: wejÅ›ciowy i poczÄ…tkowy
                 State childStateFrom = parentToSonStates.get(parentState);
                 State childStateTo = parentToSonStates.get(targetState);
-                //dodaj do listy krawêdzi krawêdŸ miêdzy stanami w kierunku odwrotnym ni¿ oryginalny
+                //dodaj do listy krawÄ™dzi krawÄ™dÅº miÄ™dzy stanami w kierunku odwrotnym niÅ¼ oryginalny
                 childAutomaton.addTransition(childStateTo,
                     childStateFrom, parentTransition.getTransitionLabel());
             }
@@ -101,9 +101,9 @@ public class AutomataOperations {
     }
 
     /**
-     * Metoda tworzy przejscie od stanu stateC do nowego stanu utworzonego przez parê A i B w
+     * Metoda tworzy przejscie od stanu stateC do nowego stanu utworzonego przez parÄ™ A i B w
      * combinedC po etykiecie transition. Dodanie nowo utworzonego stanu stateCn do listy newStates
-     * wraz z wpisaniem jej oraz jej kombinacji stanów do HashMap.
+     * wraz z wpisaniem jej oraz jej kombinacji stanÃ³w do HashMap.
      * hashMaps - 0 - statesC, 1 - statesCHandle, 2 - combinedStatesC
      */
     private static boolean makeTransition(CombinedState combinedC, List newStates,
@@ -128,7 +128,7 @@ public class AutomataOperations {
         return empty;
     }
     /**
-     * Metoda zwracaj¹ca automat akceptuj¹cy przeciêcie jezyków akceptowanych przez
+     * Metoda zwracajÄ…ca automat akceptujÄ…cy przeciÄ™cie jezykÃ³w akceptowanych przez
      * dwa podane automaty.
      */
     public static AutomatonSpecification intersection(
@@ -152,10 +152,10 @@ public class AutomataOperations {
         newStates.add(qC);
 
         /*
-         * combinedStatesC - zawiera ³añcuch kontrolny odpowiadaj¹cy kombinacji stanów A i B
-         * statesC - zawiera stan C z ³ancuchem kobminacji jego stanów A i B
-         * statesCHandle - zawiera uchwyt do stanu C poprzez ³añcuch kontrolny jego kombinacji
-         * stanów A i B
+         * combinedStatesC - zawiera Å‚aÅ„cuch kontrolny odpowiadajÄ…cy kombinacji stanÃ³w A i B
+         * statesC - zawiera stan C z Å‚ancuchem kobminacji jego stanÃ³w A i B
+         * statesCHandle - zawiera uchwyt do stanu C poprzez Å‚aÅ„cuch kontrolny jego kombinacji
+         * stanÃ³w A i B
          */
         HashMap<String, CombinedState> combinedStatesC = new HashMap<String, CombinedState>();
         HashMap<State, String> statesC = new HashMap<State, String>();
@@ -202,7 +202,7 @@ public class AutomataOperations {
                         }
                     }
                 }
-                //Epsilon przejœcia
+                //Epsilon przejÅ›cia
                 for (OutgoingTransition transitionToAn : lA) {
                     if (transitionToAn.getTransitionLabel().canBeEpsilon()) {
                         combinedC = new CombinedState();
@@ -238,7 +238,7 @@ public class AutomataOperations {
         return automatonC;
     }
     /**
-     * Zwraca automat akceptuj¹cy domkniêcie Kleene'ego
+     * Zwraca automat akceptujÄ…cy domkniÄ™cie Kleene'ego
      * jezyka akceptowanego przez dany automat.
      */
     public AutomatonSpecification getKleeneStar(AutomatonSpecification automaton) {
@@ -259,7 +259,7 @@ public class AutomataOperations {
         return kleeneautomaton;
     }
      /**
-     * Metoda tworz¹ca automat akceptuj¹cy sumê 2 jezyków.
+     * Metoda tworzÄ…ca automat akceptujÄ…cy sumÄ™ 2 jezykÃ³w.
      */
     public static AutomatonSpecification sum(
         AutomatonSpecification automatonA, AutomatonSpecification automatonB) {
