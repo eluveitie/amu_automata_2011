@@ -39,7 +39,7 @@ public class AutomataOperations {
     }
 
     /**
-     *Metoda zwraca automat akceptujący odwrócenie jezyka,
+     *Metoda zwraca automat akceptujący odwrócenie języka,
      * akceptowanego przez dany automat "parent".
      */
     public static AutomatonSpecification reverseLanguageAutomat(
@@ -70,10 +70,10 @@ public class AutomataOperations {
             //dodaj do tabelki translacji stanów
             parentToSonStates.put(parentState, childState);
 
-            //jesli stan jest początkowym, zaznacz go jako końcowy.
+            //jeśli stan jest początkowym, zaznacz go jako końcowy.
             if (parentState == parentAutomaton.getInitialState())
                 childAutomaton.markAsFinal(childStates.get(childStates.size() - 1));
-            //jesli stan jest końcowym, utwórz połączenie z jedynym możliwym stanem początkowym.
+            //jeśli stan jest końcowym, utwórz połączenie z jedynym możliwym stanem początkowym.
             else if (parentAutomaton.isFinal(parentState)) {
                 EpsilonTransitionLabel eps = new EpsilonTransitionLabel();
                 childAutomaton.addTransition(initialChildState, childState, eps);
@@ -83,7 +83,7 @@ public class AutomataOperations {
         //krok 2. utwórz krawędzie.
         //z każdego stanu w automacie wejściowym...
         for (State parentState : parentStates) {
-            //pobierz każdą wychodząca krawędź...
+            //pobierz każdą wychodzącą krawędź...
             for (OutgoingTransition parentTransition
                 : parentAutomaton.allOutgoingTransitions(parentState)) {
                 //pobierz stan wyjściowy z krawędzi
@@ -101,7 +101,7 @@ public class AutomataOperations {
     }
 
     /**
-     * Metoda tworzy przejscie od stanu stateC do nowego stanu utworzonego przez parę A i B w
+     * Metoda tworzy przejście od stanu stateC do nowego stanu utworzonego przez parę A i B w
      * combinedC po etykiecie transition. Dodanie nowo utworzonego stanu stateCn do listy newStates
      * wraz z wpisaniem jej oraz jej kombinacji stanów do HashMap.
      * hashMaps - 0 - statesC, 1 - statesCHandle, 2 - combinedStatesC
@@ -275,4 +275,5 @@ public class AutomataOperations {
         return automaton;
     }
 }
+
 
