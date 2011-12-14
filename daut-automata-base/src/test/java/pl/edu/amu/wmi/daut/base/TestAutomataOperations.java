@@ -296,7 +296,7 @@ public class TestAutomataOperations extends TestCase {
         automatonA.markAsInitial(q0);
         automatonA.markAsFinal(q1);
 
-        AutomatonSpecification automatonB = AutomataOperations.reverseLanguageAutomat(automatonA);
+        AutomatonSpecification automatonB = AutomataOperations.reverseLanguageAutomaton(automatonA);
         System.out.println("Automat wyglada tak: ");
         System.out.println(automatonB.getDotGraph());
 
@@ -385,7 +385,7 @@ public class TestAutomataOperations extends TestCase {
         automatonA.markAsInitial(q0);
         automatonA.markAsFinal(q3);
 
-        AutomatonSpecification automatonB = AutomataOperations.reverseLanguageAutomat(automatonA);
+        AutomatonSpecification automatonB = AutomataOperations.reverseLanguageAutomaton(automatonA);
         System.out.println("Automat wyglada tak: ");
         System.out.println(automatonB.getDotGraph());
 
