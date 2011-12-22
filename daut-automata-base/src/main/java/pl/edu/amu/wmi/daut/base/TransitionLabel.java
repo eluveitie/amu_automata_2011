@@ -30,7 +30,7 @@ abstract class TransitionLabel {
      * Zwraca etykietę przejścia będącą przecięciem (częścią wspólną)
      * danej etykiety i etykiety podanej jako argument label.
      */
-    TransitionLabel intersect(TransitionLabel label) {
+    final TransitionLabel intersect(TransitionLabel label) {
         TransitionLabel result;
 
         // intersect odwołuje się do metody intersectWith - problem

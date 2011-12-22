@@ -74,4 +74,24 @@ public class TestNotNaiveAutomatonSpecification extends TestCase {
         assertEquals(x0Outs.size(), 2);
 
     }
+    /**
+     * Test metody dopełniającej automat na automacie, któremu brakuje jednego przejścia.
+     */
+    public final void testMakeFullAlmostFull() {
+        NotNaiveAutomatonSpecification spec = new NotNaiveAutomatonSpecification();
+
+        State s0 = spec.addState();
+        State s1 = spec.addState();
+        State s2 = spec.addState();
+
+        spec.addTransition(s0, s1, new CharTransitionLabel('a'));
+        spec.addLoop(s1, new CharTransitionLabel('a'));
+        spec.addLoop(s1, new CharTransitionLabel('b'));
+        spec.addLoop(s2, new CharTransitionLabel('a'));
+        spec.addLoop(s2, new CharTransitionLabel('b'));
+
+        spec.makeFull("ab");
+        assertEquals(spec.countStates(), 4);
+        assertTrue(spec.isFull("ab"));
+    }
 }

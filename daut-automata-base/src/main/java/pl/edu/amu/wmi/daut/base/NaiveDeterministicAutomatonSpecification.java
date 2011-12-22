@@ -59,6 +59,11 @@ public class NaiveDeterministicAutomatonSpecification
     }
 
     @Override
+    public void unmarkAsFinalState(State state) {
+        this.automatonSpec.unmarkAsFinalState(state);
+    }
+
+    @Override
     public State getInitialState() {
         return this.automatonSpec.getInitialState();
     }

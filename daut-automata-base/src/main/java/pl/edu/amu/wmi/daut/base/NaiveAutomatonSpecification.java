@@ -9,7 +9,7 @@ import java.util.LinkedList;
  *
  * Wszystkie przejścia są przechowywane na jednej liście.
  */
-class NaiveAutomatonSpecification extends AutomatonSpecification {
+public class NaiveAutomatonSpecification extends AutomatonSpecification {
 
     /**
      * Stan to po prostu pusta klasa. Liczy się tylko tożsamość instancji.
@@ -64,28 +64,39 @@ class NaiveAutomatonSpecification extends AutomatonSpecification {
         private TransitionLabel transitionLabel;
     }
 
+    @Override
     public NaiveState addState() {
         NaiveState newState = new NaiveState();
         allStates.add(newState);
         return newState;
     }
 
+    @Override
     public void addTransition(State from, State to, TransitionLabel transitionLabel) {
         transitions.add(new NaiveTransition((NaiveState) from, (NaiveState) to, transitionLabel));
     }
 
+    @Override
     public void markAsInitial(State state) {
         initialState = (NaiveState) state;
     }
 
+    @Override
     public void markAsFinal(State state) {
         finalStates.add((NaiveState) state);
     }
 
+    @Override
+    public void unmarkAsFinalState(State state) {
+        finalStates.remove((NaiveState) state);
+    }
+
+    @Override
     public List<State> allStates() {
         return allStates;
     }
 
+    @Override
     public List<OutgoingTransition> allOutgoingTransitions(State from) {
         LinkedList<OutgoingTransition> returnedList = new LinkedList<OutgoingTransition>();
 
@@ -97,10 +108,12 @@ class NaiveAutomatonSpecification extends AutomatonSpecification {
         return returnedList;
     }
 
+    @Override
     public State getInitialState() {
         return initialState;
     }
 
+    @Override
     public boolean isFinal(State state) {
         for (NaiveState someState : finalStates) {
             if (someState == state)

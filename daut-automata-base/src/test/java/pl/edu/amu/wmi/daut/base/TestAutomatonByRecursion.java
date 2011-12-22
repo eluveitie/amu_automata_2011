@@ -18,7 +18,6 @@ public class TestAutomatonByRecursion extends TestCase {
         State q2a = spec.addState();
 
         spec.addTransition(q0a, q1a, new CharTransitionLabel('a'));
-        spec.addTransition(q1a, q2a, new EpsilonTransitionLabel());
         spec.addTransition(q1a, q2a, new CharTransitionLabel('b'));
         spec.addTransition(q0a, q2a, new CharTransitionLabel('c'));
 
@@ -28,9 +27,9 @@ public class TestAutomatonByRecursion extends TestCase {
         final AutomatonByRecursion automaton = new AutomatonByRecursion(spec);
 
         assertFalse(automaton.accepts("a"));
-        assertFalse(automaton.accepts("ab"));
+        assertTrue(automaton.accepts("ab"));
         assertTrue(automaton.accepts("c"));
-        assertFalse(automaton.accepts("ab"));
+        assertFalse(automaton.accepts("a"));
     }
     /**
      * Trochę bardziej skomplikowany test.
@@ -46,8 +45,7 @@ public class TestAutomatonByRecursion extends TestCase {
 
         specA.addTransition(q0A, q1A, new CharTransitionLabel('a'));
         specA.addTransition(q1A, q3A, new CharTransitionLabel('b'));
-        specA.addTransition(q1A, q2A, new EpsilonTransitionLabel());
-        specA.addTransition(q2A, q3A, new EpsilonTransitionLabel());
+        specA.addTransition(q1A, q2A, new CharTransitionLabel('b'));
         specA.addTransition(q0A, q3A, new CharTransitionLabel('b'));
 
         specA.markAsInitial(q0A);
@@ -55,7 +53,7 @@ public class TestAutomatonByRecursion extends TestCase {
 
         AutomatonByRecursion automatonA = new AutomatonByRecursion(specA);
 
-        assertFalse(automatonA.accepts("ab"));
+        assertTrue(automatonA.accepts("ab"));
         assertFalse(automatonA.accepts("a"));
         assertTrue(automatonA.accepts("b"));
         assertFalse(automatonA.accepts("a"));
@@ -113,6 +111,6 @@ public class TestAutomatonByRecursion extends TestCase {
         assertTrue(automatonB.accepts("abcd"));
         assertFalse(automatonB.accepts("abcdz"));
         assertTrue(automatonB.accepts("abcd"));
-        assertFalse(automatonB.accepts("abcdg"));
+        assertFalse(automatonB.accepts("abcdggfh"));
     }
 }

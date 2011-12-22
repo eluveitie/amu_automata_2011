@@ -2,6 +2,8 @@ package pl.edu.amu.wmi.daut.base;
 import java.util.List;
 import java.util.Arrays;
 
+import java.util.HashSet;
+import java.util.Set;
 import junit.framework.TestCase;
 
 /**
@@ -27,6 +29,83 @@ public class TestAutomatonSpecification extends TestCase {
             State q = spec.addState();
         }
         assertEquals(spec.countStates(), 123456 + 1);
+    }
+
+    /**
+     * Test metody acceptEmptyWord dla automatu z tym samym stanem poczatkowym i koncowym.
+     */
+    public final void testAcceptEmptyWordFinalTheSameAsInitial() {
+
+        //Test 1 - stan poczatkowy jest stanem koncowym
+        NaiveAutomatonSpecification testSpec1 = new NaiveAutomatonSpecification();
+        State state = testSpec1.addState();
+        testSpec1.markAsInitial(state);
+        testSpec1.markAsFinal(state);
+        assertTrue(testSpec1.acceptEmptyWord());
+    }
+
+    /**
+     * Test metody acceptEmptyWord dla automatu bez epsilon-przejsc.
+     */
+    public final void testAcceptEmptyWordNoEpsilonTransitions() {
+
+        //Test 2 - automat ma wiecej stanow, bez epsilon-przejsc do stanu koncowego
+        NaiveAutomatonSpecification testSpec2 = new NaiveAutomatonSpecification();
+        State q0 = testSpec2.addState();
+        State q1 = testSpec2.addState();
+        State q2 = testSpec2.addState();
+
+        testSpec2.addTransition(q0, q1, new CharTransitionLabel('a'));
+        testSpec2.addTransition(q1, q2, new CharTransitionLabel('b'));
+
+        testSpec2.markAsInitial(q0);
+        testSpec2.markAsFinal(q2);
+
+        assertFalse(testSpec2.acceptEmptyWord());
+    }
+
+    /**
+     * Test metody acceptEmptyWord dla automatu z epsilon przejsciami
+     * ze stanu poczatkowego do koncowego.
+     */
+    public final void testAcceptEmptyWordWithEpsilonTransitions() {
+
+        //Test 3 - automat jak w poprzednim przypadku
+        //ale zawiera epsilon-przejscia do stanu koncowego
+        NaiveAutomatonSpecification testSpec2 = new NaiveAutomatonSpecification();
+        State q0 = testSpec2.addState();
+        State q1 = testSpec2.addState();
+        State q2 = testSpec2.addState();
+        State q3 = testSpec2.addState();
+
+        testSpec2.markAsInitial(q0);
+        testSpec2.markAsFinal(q2);
+
+        testSpec2.addTransition(q0, q1, new CharTransitionLabel('a'));
+        testSpec2.addTransition(q1, q2, new CharTransitionLabel('b'));
+
+        testSpec2.addTransition(q0, q3, new EpsilonTransitionLabel());
+        testSpec2.addTransition(q3, q2, new EpsilonTransitionLabel());
+
+        assertTrue(testSpec2.acceptEmptyWord());
+    }
+
+    /**
+     * Test metody acceptEmptyWord dla automatu z pętlą.
+     */
+    public final void testAcceptEmptyWordForAutomatonWithLoop() {
+
+        NaiveAutomatonSpecification spec = new NaiveAutomatonSpecification();
+        State s0 = spec.addState();
+        State s1 = spec.addState();
+        spec.markAsInitial(s0);
+        spec.markAsFinal(s1);
+        spec.addLoop(s0, new CharTransitionLabel('a'));
+        spec.addTransition(s1, s0, new CharTransitionLabel('b'));
+        assertFalse(spec.acceptEmptyWord());
+
+        spec.markAsFinal(s0);
+        assertTrue(spec.acceptEmptyWord());
     }
 
     /**
@@ -714,5 +793,294 @@ public class TestAutomatonSpecification extends TestCase {
         AutomatonSpecification automat = new NaiveAutomatonSpecification();
         State s1 = automat.addState();
         assertFalse(automat.isEmpty());
+    }
+
+    /**
+     * Test wariacji metody addTransition, w której tworzyony jest nowy stan.
+     */
+    public final void testAddTransitionWithAddingState() {
+        AutomatonSpecification automat = new NaiveAutomatonSpecification();
+        State s0 = automat.addState();
+
+        //Sprawdzam ilość stanów oraz przejść w automacie przed zastosowaniem metody.
+        int numberOfStates1 = automat.countStates();
+        int numberOfTransitions1 = automat.countTransitions();
+
+        //Dodaję nowy stan i przejście używając metody addTransition i sprawdzam
+        //ponownie ilość stanów oraz przejść.
+        State s1 = automat.addTransition(s0, new CharTransitionLabel('a'));
+        int numberOfStates2 = automat.countStates();
+        int numberOfTransitions2 = automat.countTransitions();
+
+        //Sprawdzam, czy ilości stanów oraz przejsć nie są równe oraz czy ze stanu
+        //s0 da sie przejść do stanu s1.
+        assertFalse(numberOfStates1 == numberOfStates2);
+        assertFalse(numberOfTransitions1 == numberOfTransitions2);
+        assertTrue(automat.allOutgoingTransitions(s0).get(0).getTargetState() == s1);
+    }
+
+    /**
+     * test metody insert: testuje zwykłe użycie.
+     */
+    public final void testInsertSimpleTest() {
+        AutomatonSpecification firstAutomaton = new NaiveAutomatonSpecification();
+        State firstState = firstAutomaton.addState();
+        firstAutomaton.markAsInitial(firstState);
+        AutomatonSpecification second = new NaiveAutomatonSpecification();
+        String fromString = "Automaton:\n-States: q0 q1 q2 q3 q4 \n-Transitions:\n  q0 -a-> "
+            + "q1\n  q1 -a-> q0\n  q2 -epsilon-> q4"
+            + "\n  q3 -ANY-> q4\n-Initial state: q0\n-Final states: q1 ";
+        try {
+            second.fromString(fromString);
+        } catch (Exception e) {
+            fail("Nie udało się stworzyć automatu.");
+        }
+
+        firstAutomaton.insert(firstState, second);
+        assertTrue(fromString.equals(firstAutomaton.toString()));
+    }
+
+    /**
+     * test funkcji insert: dodaje do automatu pusty automat.
+     */
+    public final void testInsertEmptyAutomaton() {
+        AutomatonSpecification base =  new NaiveAutomatonSpecification();
+        State s1 = base.addState();
+        State s2 = base.addState();
+        State s3 = base.addState();
+        base.markAsInitial(s1);
+        base.markAsFinal(s1);
+        base.markAsFinal(s3);
+        base.addTransition(s1, s3, new CharTransitionLabel('a'));
+        base.addTransition(s2, s1, new CharTransitionLabel('b'));
+        base.addTransition(s2, s1, new CharTransitionLabel('c'));
+        AutomatonSpecification empty = new NaiveAutomatonSpecification();
+        String automatonString = base.toString();
+        base.insert(s2, empty);
+        assertEquals(automatonString, base.toString());
+    }
+
+    /**
+     * testuje metodę insert, ale dodaje automat bez jakichkolwiek przejść.
+     */
+    public final void testInsertNoTransitions() {
+        final int automatonSize = 300;
+        AutomatonSpecification base = new NaiveAutomatonSpecification();
+        for (int iter = 0; iter < 99; ++iter) {
+            base.addState();
+        }
+        AutomatonSpecification secondAutomaton = new NaiveAutomatonSpecification();
+        State initial = secondAutomaton.addState();
+        secondAutomaton.markAsInitial(initial);
+        for (int iter = 0; iter < 201; ++iter) {
+            secondAutomaton.addState();
+        }
+        base.insert(initial, secondAutomaton);
+        assertEquals(base.countTransitions(), 0);
+        assertEquals(base.countStates(), automatonSize);
+    }
+
+    /**
+     * Testuje działanie metody clone(). Test 1.
+     */
+    public final void testCloneMiniAutomaton() {
+
+        AutomatonSpecification mini = new NaiveAutomatonSpecification();
+
+        State q0 = mini.addState();
+        State q1 = mini.addState();
+        State q2 = mini.addState();
+
+        mini.markAsInitial(q0);
+        mini.markAsFinal(q2);
+
+        mini.addTransition(q0, q1, new CharTransitionLabel('a'));
+        mini.addTransition(q1, q2, new CharTransitionLabel('b'));
+
+        AutomatonSpecification clon = mini.clone();
+
+        assertEquals(mini.countStates(), clon.countStates());
+        assertEquals(mini.countTransitions(), clon.countTransitions());
+
+        AutomatonByStack mini2 = new AutomatonByStack(mini);
+        AutomatonByStack clon2 = new AutomatonByStack(clon);
+
+        assertEquals(clon2.accepts("ab"), mini2.accepts("ab"));
+        assertEquals(clon2.accepts("aa"), mini2.accepts("aa"));
+        assertEquals(clon2.accepts(""), mini2.accepts(""));
+    }
+
+    /**
+     * Testuje działanie metody clone(). Test 2.
+     */
+    public final void testCloneMini2Automaton() {
+
+        AutomatonSpecification mini = new NaiveAutomatonSpecification();
+
+        State q0 = mini.addState();
+        State q1 = mini.addState();
+
+        mini.markAsInitial(q0);
+        mini.markAsFinal(q1);
+
+        mini.addTransition(q0, q1, new CharTransitionLabel('a'));
+        mini.addLoop(q1, new CharTransitionLabel('a'));
+        mini.addLoop(q1, new CharTransitionLabel('b'));
+
+        AutomatonSpecification clon = mini.clone();
+
+        assertEquals(mini.countStates(), clon.countStates());
+        assertEquals(mini.countTransitions(), clon.countTransitions());
+
+        AutomatonByStack mini2 = new AutomatonByStack(mini);
+        AutomatonByStack clon2 = new AutomatonByStack(clon);
+
+        assertEquals(clon2.accepts("a"), mini2.accepts("a"));
+        assertEquals(clon2.accepts("aa"), mini2.accepts("aa"));
+        assertEquals(clon2.accepts("aaa"), mini2.accepts("aaa"));
+        assertEquals(clon2.accepts("ab"), mini2.accepts("ab"));
+        assertEquals(clon2.accepts("aab"), mini2.accepts("aab"));
+        assertEquals(clon2.accepts("aba"), mini2.accepts("aba"));
+        assertEquals(clon2.accepts("ababa"), mini2.accepts("ababa"));
+
+        assertEquals(clon2.accepts(""), mini2.accepts(""));
+        assertEquals(clon2.accepts("b"), mini2.accepts("b"));
+        assertEquals(clon2.accepts("bbba"), mini2.accepts("bbba"));
+        assertEquals(clon2.accepts("cos"), mini2.accepts("cos"));
+    }
+
+    /**
+     * Testuje działanie metody clone(). Test 3.
+     */
+    public final void testCloneMini3Automaton() {
+
+        AutomatonSpecification mini = new NaiveAutomatonSpecification();
+
+        State q0 = mini.addState();
+        State q1 = mini.addState();
+        State q2 = mini.addState();
+        State q3 = mini.addState();
+
+        mini.addTransition(q0, q1, new CharTransitionLabel('a'));
+        mini.addTransition(q1, q2, new CharTransitionLabel('b'));
+        mini.addTransition(q1, q3, new CharTransitionLabel('b'));
+
+        mini.markAsInitial(q0);
+        mini.markAsFinal(q2);
+
+        AutomatonSpecification clon = mini.clone();
+
+        assertEquals(mini.countStates(), clon.countStates());
+        assertEquals(mini.countTransitions(), clon.countTransitions());
+
+        AutomatonByStack mini2 = new AutomatonByStack(mini);
+        AutomatonByStack clon2 = new AutomatonByStack(clon);
+
+        assertEquals(clon2.accepts("ab"), mini2.accepts("ab"));
+        assertEquals(clon2.accepts("bb"), mini2.accepts("bb"));
+    }
+
+    /**
+     * Testuje działanie metody clone(). Test 4.
+     */
+    public final void testCloneMini4Automaton() {
+
+    AutomatonSpecification mini = new NaiveAutomatonSpecification();
+
+        State q0 = mini.addState();
+        State q1 = mini.addState();
+        State q2 = mini.addState();
+        State q3 = mini.addState();
+
+        mini.addTransition(q0, q1, new CharTransitionLabel('a'));
+        mini.addTransition(q1, q0, new CharTransitionLabel('b'));
+        mini.addTransition(q1, q2, new CharTransitionLabel('c'));
+        mini.addTransition(q2, q3, new CharTransitionLabel('a'));
+        mini.addTransition(q3, q2, new CharTransitionLabel('b'));
+
+        mini.markAsInitial(q0);
+        mini.markAsFinal(q3);
+
+        AutomatonSpecification clon = mini.clone();
+
+        assertEquals(mini.countStates(), clon.countStates());
+        assertEquals(mini.countTransitions(), clon.countTransitions());
+
+        AutomatonByStack mini2 = new AutomatonByStack(mini);
+        AutomatonByStack clon2 = new AutomatonByStack(clon);
+
+        assertEquals(clon2.accepts("aca"), mini2.accepts("aca"));
+        assertEquals(clon2.accepts("bc"), mini2.accepts("bc"));
+        assertEquals(clon2.accepts("bbc"), mini2.accepts("bbc"));
+        assertEquals(clon2.accepts("acabababa"), mini2.accepts("acabababa"));
+        assertEquals(clon2.accepts(""), mini2.accepts(""));
+        assertEquals(clon2.accepts("cc"), mini2.accepts("cc"));
+        assertEquals(clon2.accepts("bca"), mini2.accepts("bca"));
+        assertEquals(clon2.accepts("acc"), mini2.accepts("acc"));
+    }
+
+    /**
+     * Prosty test metody getEpsilonClosure(State).
+     */
+    public final void testSimpleGetEpsilonClosure() {
+        // Automat z tylko jednym stanem (początkowy i końcowy).
+        // Tylko jedne możliwe przejście (czytanie znaku pustego
+        // i wracanie na ten sam stan).
+        NaiveAutomatonSpecification automat = new NaiveAutomatonSpecification();
+        // Nowy automat ma już stan początkowy i ustawiamy przejście.
+        automat.addTransition(automat.getInitialState(),
+                automat.getInitialState(),
+                new EpsilonTransitionLabel());
+        // Zaznaczamy stan początkowy jako końcowy.
+        automat.markAsFinal(automat.getInitialState());
+        Set<State> zbior = new HashSet<State>();
+        zbior.add(automat.getInitialState());
+        assertEquals(zbior,
+                automat.getEpsilonClosure(automat.getInitialState()));
+    }
+
+    /**
+     * Trudniejszy test metody getEpsilonClosure(State).
+     */
+    public final void testHardGetEpsilonClosure() {
+        // Prosty automat z czterema stanami.
+        NaiveAutomatonSpecification automat = new NaiveAutomatonSpecification();
+        State s0, s1, s2, s3;
+        s0 = automat.getInitialState();
+        s1 = automat.addState();
+        s2 = automat.addState();
+        s3 = automat.addState();
+        automat.markAsFinal(s3);
+
+        // Dodajmy jakieś "normalne" przejścia.
+        automat.addTransition(s0, s1, new CharTransitionLabel('a'));
+        automat.addTransition(s0, s2, new CharTransitionLabel('b'));
+        automat.addTransition(s1, s3, new CharTransitionLabel('a'));
+        automat.addTransition(s1, s3, new CharTransitionLabel('b'));
+        automat.addTransition(s2, s1, new CharTransitionLabel('b'));
+
+        // Dodajemy epsilon przejścia.
+        automat.addTransition(s2, s3, new EpsilonTransitionLabel());
+        automat.addTransition(s3, s1, new EpsilonTransitionLabel());
+        automat.addTransition(s3, s0, new EpsilonTransitionLabel());
+        automat.addTransition(s0, s3, new EpsilonTransitionLabel());
+
+        Set<State> zbior = new HashSet<State>();
+        zbior.add(s1);
+        assertEquals(zbior, automat.getEpsilonClosure(s1));
+
+        zbior = automat.getEpsilonClosure(s1);
+        zbior.add(s0);
+        zbior.add(s1);
+        zbior.add(s2);
+        zbior.add(s3);
+        assertEquals(zbior, automat.getEpsilonClosure(s2));
+
+        // Tu jest pętla.
+        zbior = new HashSet<State>();
+        zbior.add(s0);
+        zbior.add(s1);
+        zbior.add(s3);
+        assertEquals(zbior, automat.getEpsilonClosure(s3));
     }
 }

@@ -180,13 +180,20 @@ public class TestNaiveAutomatonSpecification extends TestCase {
         NaiveAutomatonSpecification spec2 = new NaiveAutomatonSpecification();
         NaiveAutomatonSpecification spec3 = new NaiveAutomatonSpecification();
 
+        assertFalse(spec.isFull("abc"));
+
         spec.makeFull("abc");
+
         assertTrue(spec.isFull("abc"));
+        assertEquals(spec.countStates(), 1);
 
         State s = spec2.addState();
 
+        assertFalse(spec2.isFull("abc"));
+
         spec2.makeFull("abc");
         assertTrue(spec2.isFull("abc"));
+        assertEquals(spec2.countStates(), 2);
 
         State s0 = spec3.addState();
         State s1 = spec3.addState();
@@ -194,8 +201,54 @@ public class TestNaiveAutomatonSpecification extends TestCase {
 
         spec3.addTransition(s0, s1, new CharTransitionLabel('a'));
 
+        assertFalse(spec3.isFull("abc"));
+
         spec3.makeFull("abc");
         assertTrue(spec3.isFull("abc"));
+        assertEquals(spec3.countStates(), 4);
+    }
+
+    /**
+     * Test metody dopełniającej automat na automacie, który jest już pełny.
+     */
+    public final void testMakeFullAlreadyFull() {
+        NaiveAutomatonSpecification spec = new NaiveAutomatonSpecification();
+
+        State s0 = spec.addState();
+        State s1 = spec.addState();
+        State s2 = spec.addState();
+
+        spec.addTransition(s0, s1, new CharTransitionLabel('b'));
+        spec.addTransition(s0, s1, new CharTransitionLabel('a'));
+        spec.addLoop(s1, new CharTransitionLabel('a'));
+        spec.addLoop(s1, new CharTransitionLabel('b'));
+        spec.addLoop(s2, new CharTransitionLabel('a'));
+        spec.addLoop(s2, new CharTransitionLabel('b'));
+
+        spec.makeFull("ab");
+        assertTrue(spec.isFull("ab"));
+        assertEquals(spec.countStates(), 3);
+    }
+
+    /**
+     * Test metody dopełniającej automat na automacie, któremu brakuje jednego przejścia.
+     */
+    public final void testMakeFullAlmostFull() {
+        NaiveAutomatonSpecification spec = new NaiveAutomatonSpecification();
+
+        State s0 = spec.addState();
+        State s1 = spec.addState();
+        State s2 = spec.addState();
+
+        spec.addTransition(s0, s1, new CharTransitionLabel('a'));
+        spec.addLoop(s1, new CharTransitionLabel('a'));
+        spec.addLoop(s1, new CharTransitionLabel('b'));
+        spec.addLoop(s2, new CharTransitionLabel('a'));
+        spec.addLoop(s2, new CharTransitionLabel('b'));
+
+        spec.makeFull("ab");
+        assertEquals(spec.countStates(), 4);
+        assertTrue(spec.isFull("ab"));
     }
 
     /**
@@ -204,7 +257,7 @@ public class TestNaiveAutomatonSpecification extends TestCase {
     public final void testmakeOneTransitionAutomaton(char c) {
         AutomatonSpecification spec = new NaiveAutomatonSpecification();
 
-        spec = spec.makeOneTransitionAutomaton(c);
+        spec.makeOneTransitionAutomaton(c);
 
         //testowanie
 

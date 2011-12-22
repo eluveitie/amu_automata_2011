@@ -6,6 +6,6 @@ package pl.edu.amu.wmi.daut.base;
  * Konkretne klasy reprezentujące poszczególne rodzaje automatów mogą
  * używać dowolnych klas do reprezentowania stanów.
  */
-interface State {
+public interface State {
 
 }

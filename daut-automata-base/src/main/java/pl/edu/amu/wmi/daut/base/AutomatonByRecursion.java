@@ -6,7 +6,11 @@ import java.util.List;
  * klasa która decyduje czy automat zaakceptuje dany napis.
  */
 public final class AutomatonByRecursion implements Acceptor {
-    AutomatonByRecursion(final AutomatonSpecification specification) {
+
+    /**
+     * konstruktor, pobiera specyfikacje automatu.
+     */
+    public AutomatonByRecursion(final AutomatonSpecification specification) {
         automaton = specification;
     }
 
@@ -33,6 +37,9 @@ public final class AutomatonByRecursion implements Acceptor {
                     }
                     if (currentLabel.canAcceptCharacter(text.charAt(from))) {
                         check(text, from + 1, toEnd, transition.getTargetState());
+                    }
+                    if (accept) {
+                        return;
                     }
                 }
             }

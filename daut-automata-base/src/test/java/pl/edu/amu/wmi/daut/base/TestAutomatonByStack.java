@@ -1,5 +1,7 @@
 package pl.edu.amu.wmi.daut.base;
 
+import java.util.HashSet;
+import java.util.Arrays;
 import junit.framework.TestCase;
 
 /**
@@ -328,4 +330,69 @@ public class TestAutomatonByStack extends TestCase {
         assertFalse(automaton.accepts("bcaca"));
         assertFalse(automaton.accepts("acca"));
     }
+
+/**
+ * Siodmy test #362.
+ */
+  public final void test7() {
+    final AutomatonSpecification spec = new NaiveAutomatonSpecification();
+
+    HashSet<Character> separator =
+      new HashSet<Character>(Arrays.asList('.', ':'));
+    HashSet<Character> digit0to3 =
+      new HashSet<Character>(Arrays.asList('0', '1', '2', '3'));
+    HashSet<Character> digit0to5 =
+      new HashSet<Character>(Arrays.asList('0', '1', '2', '3', '4', '5'));
+    HashSet<Character> digit0to9 =
+      new HashSet<Character>(Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'));
+    HashSet<Character> digit3to9 =
+      new HashSet<Character>(Arrays.asList('3', '4', '5', '6', '7', '8', '9'));
+
+
+
+    State q0 = spec.addState();
+    State q1 = spec.addState();
+    State q2 = spec.addState();
+    State q3 = spec.addState();
+    State q4 = spec.addState();
+    State q5 = spec.addState();
+    State q6 = spec.addState();
+    State q7 = spec.addState();
+    State q8 = spec.addState();
+    State q9 = spec.addState();
+
+    spec.addTransition(q0, q1, new CharTransitionLabel('0'));
+    spec.addTransition(q0, q3, new CharTransitionLabel('1'));
+    spec.addTransition(q0, q5, new CharTransitionLabel('2'));
+    spec.addTransition(q1, q2, new CharSetTransitionLabel(separator));
+    spec.addTransition(q3, q2, new CharSetTransitionLabel(separator));
+    spec.addTransition(q4, q2, new CharSetTransitionLabel(separator));
+    spec.addTransition(q5, q2, new CharSetTransitionLabel(separator));
+    spec.addTransition(q6, q2, new CharSetTransitionLabel(separator));
+    spec.addTransition(q9, q2, new CharSetTransitionLabel(separator));
+    spec.addTransition(q5, q6, new CharSetTransitionLabel(digit0to3));
+    spec.addTransition(q2, q7, new CharSetTransitionLabel(digit0to5));
+    spec.addTransition(q3, q4, new CharSetTransitionLabel(digit0to9));
+    spec.addTransition(q7, q8, new CharSetTransitionLabel(digit0to9));
+    spec.addTransition(q0, q9, new CharSetTransitionLabel(digit3to9));
+    spec.markAsInitial(q0);
+    spec.markAsFinal(q8);
+
+    final AutomatonByStack automaton = new AutomatonByStack(spec);
+    assertTrue(automaton.accepts("0:00"));
+    assertTrue(automaton.accepts("5:01"));
+    assertTrue(automaton.accepts("2:01"));
+    assertTrue(automaton.accepts("1.11"));
+    assertTrue(automaton.accepts("12:59"));
+    assertTrue(automaton.accepts("23:08"));
+    assertTrue(automaton.accepts("0.59"));
+    assertFalse(automaton.accepts("03:22"));
+    assertFalse(automaton.accepts("24:13"));
+    assertFalse(automaton.accepts("1:69"));
+    assertFalse(automaton.accepts("23:591"));
+    assertFalse(automaton.accepts(""));
+    assertFalse(automaton.accepts("1"));
+    assertFalse(automaton.accepts("1:1"));
+    assertFalse(automaton.accepts("00:00"));
+  }
 }

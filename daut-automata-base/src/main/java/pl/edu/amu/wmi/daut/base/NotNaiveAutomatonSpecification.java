@@ -42,6 +42,10 @@ class NotNaiveAutomatonSpecification extends AutomatonSpecification {
         finalStates.add((NotNaiveState) state);
     }
 
+    public void unmarkAsFinalState(State state) {
+        finalStates.remove((NotNaiveState) state);
+    }
+
     public List<State> allStates() {
         return allStates;
     }
@@ -67,6 +71,7 @@ class NotNaiveAutomatonSpecification extends AutomatonSpecification {
     public List<OutgoingTransition> getOutReturnOutgoingTransitions(State from) {
         return ((NotNaiveState) from).returnOutgoingTrasitions();
     }
+
     private LinkedList<State> allStates = new LinkedList<State>();
     private NotNaiveState initialState;
     private LinkedList<NotNaiveState> finalStates = new LinkedList<NotNaiveState>();

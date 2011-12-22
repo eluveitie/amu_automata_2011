@@ -19,6 +19,11 @@ class EmptyTransitionLabel extends TransitionLabel {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "EMPTY";
+    }
+
     protected TransitionLabel intersectWith(TransitionLabel label) {
         // przecięcie pustego z czymkolwiek daje oczywiście pustą etykietę
         return this;

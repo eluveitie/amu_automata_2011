@@ -155,12 +155,12 @@ public class TestComplementCharClassTransitionLabel extends TestCase {
 
         //testujemy
         inter = test5.intersect(any);
-        assertEquals("ANY", inter.toString());
+        assertEquals("[^0-79a-j]", inter.toString());
         assertFalse(inter.canBeEpsilon());
         assertFalse(inter.isEmpty());
-        assertTrue(inter.canAcceptCharacter('0'));
+        assertFalse(inter.canAcceptCharacter('0'));
         assertTrue(inter.canAcceptCharacter('+'));
-        assertTrue(inter.canAcceptCharacter('b'));
+        assertFalse(inter.canAcceptCharacter('b'));
         assertTrue(inter.canAcceptCharacter('Y'));
     }
 }
