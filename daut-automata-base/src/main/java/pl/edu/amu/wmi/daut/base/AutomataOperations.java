@@ -5,13 +5,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.Map;
-<<<<<<< HEAD
-=======
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
-
->>>>>>> d78ffc372bbb4628f2d7ac9e0e43aeee66fa4914
 
 /**
  * Klasa zwierająca operacje na automatach.
