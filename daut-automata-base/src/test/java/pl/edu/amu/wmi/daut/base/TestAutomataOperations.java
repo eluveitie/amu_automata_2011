@@ -273,7 +273,6 @@ public class TestAutomataOperations extends TestCase {
      * Test sprawdza, czy odwracanie automatu działa.
      */
     public final void testInversionA() {
-        System.out.println("testInversionA start");
         List<String> words = new ArrayList<String>();
         words.add("ab");
         words.add("ba");
@@ -297,8 +296,6 @@ public class TestAutomataOperations extends TestCase {
         automatonA.markAsFinal(q1);
 
         AutomatonSpecification automatonB = AutomataOperations.reverseLanguageAutomaton(automatonA);
-        System.out.println("Automat wyglada tak: ");
-        System.out.println(automatonB.getDotGraph());
 
         NondeterministicAutomatonByThompsonApproach originalAutomaton = new
                 NondeterministicAutomatonByThompsonApproach(automatonA);
@@ -318,21 +315,17 @@ public class TestAutomataOperations extends TestCase {
         }
 
         for (String word : wordsToAccept) {
-            System.out.println("Testuje " + word + " (powinno przejsc)");
             assertTrue(reversedAutomaton.accepts(word));
         }
         for (String word : wordsToReject) {
-            System.out.println("Testuje " + word + " (nie powinno przejsc)");
             assertFalse(reversedAutomaton.accepts(word));
         }
-        System.out.println("testInversionA koniec");
     }
 
     /**
      * Test sprawdza, czy odwracanie automatu działa (B).
      */
     public final void testInversionB() {
-        System.out.println("testInversionB start");
         List<String> words = new ArrayList<String>();
         words.add("cb");
         words.add("bc");
@@ -386,8 +379,6 @@ public class TestAutomataOperations extends TestCase {
         automatonA.markAsFinal(q3);
 
         AutomatonSpecification automatonB = AutomataOperations.reverseLanguageAutomaton(automatonA);
-        System.out.println("Automat wyglada tak: ");
-        System.out.println(automatonB.getDotGraph());
 
         NondeterministicAutomatonByThompsonApproach originalAutomaton = new
                 NondeterministicAutomatonByThompsonApproach(automatonA);
@@ -407,13 +398,10 @@ public class TestAutomataOperations extends TestCase {
         }
 
         for (String word : wordsToAccept) {
-            System.out.println("Testuje " + word + " (powinno przejsc)");
             assertTrue(reversedAutomaton.accepts(word));
         }
         for (String word : wordsToReject) {
-            System.out.println("Testuje " + word + " (nie powinno przejsc)");
             assertFalse(reversedAutomaton.accepts(word));
         }
-        System.out.println("testInversionB koniec");
     }
 }
