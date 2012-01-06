@@ -113,4 +113,121 @@ public class TestAutomatonByRecursion extends TestCase {
         assertTrue(automatonB.accepts("abcd"));
         assertFalse(automatonB.accepts("abcdggfh"));
     }
+
+    /**
+     * Automat rozpoznający godziny I.
+     * Automat: automat deterministyczny (bądź niedeterministyczny)
+     * (ale bez epsilon-przejść) akceptujący napisy reprezentujące zapis
+     * godziny, gdzie dwukropek jest separatorem godziny i minuty, na
+     * początku napisu może występować '0', przykładowe napisy, które
+     * powinny być akceptowane: 11:11, 23:59, 0:00, 3:45, 03:45, 15:45, 12:00
+     */
+      public final void testAutomatClock1() {
+
+        final AutomatonSpecification specClock1 = new NaiveAutomatonSpecification();
+
+        State q0 = specClock1.addState();
+        State q1A = specClock1.addState();
+        State q1B = specClock1.addState();
+        State q1C = specClock1.addState();
+        State q2 = specClock1.addState();
+        State q3 = specClock1.addState();
+        State q4 = specClock1.addState();
+        State q5 = specClock1.addState();
+        State qZ = specClock1.addState();
+
+        specClock1.addTransition(q0, q1A, new CharTransitionLabel('0'));
+        specClock1.addTransition(q0, q1B, new CharTransitionLabel('1'));
+        specClock1.addTransition(q0, q1C, new CharTransitionLabel('2'));
+        specClock1.addTransition(q0, q2, new CharTransitionLabel('3'));
+        specClock1.addTransition(q0, q2, new CharTransitionLabel('4'));
+        specClock1.addTransition(q0, q2, new CharTransitionLabel('5'));
+        specClock1.addTransition(q0, q2, new CharTransitionLabel('6'));
+        specClock1.addTransition(q0, q2, new CharTransitionLabel('7'));
+        specClock1.addTransition(q0, q2, new CharTransitionLabel('8'));
+        specClock1.addTransition(q0, q2, new CharTransitionLabel('9'));
+
+        specClock1.addTransition(q1A, q2, new CharTransitionLabel('0'));
+        specClock1.addTransition(q1A, q2, new CharTransitionLabel('1'));
+        specClock1.addTransition(q1A, q2, new CharTransitionLabel('2'));
+        specClock1.addTransition(q1A, q2, new CharTransitionLabel('3'));
+        specClock1.addTransition(q1A, q2, new CharTransitionLabel('4'));
+        specClock1.addTransition(q1A, q2, new CharTransitionLabel('5'));
+        specClock1.addTransition(q1A, q2, new CharTransitionLabel('6'));
+        specClock1.addTransition(q1A, q2, new CharTransitionLabel('7'));
+        specClock1.addTransition(q1A, q2, new CharTransitionLabel('8'));
+        specClock1.addTransition(q1A, q2, new CharTransitionLabel('9'));
+
+
+        specClock1.addTransition(q1B, q2, new CharTransitionLabel('0'));
+        specClock1.addTransition(q1B, q2, new CharTransitionLabel('1'));
+        specClock1.addTransition(q1B, q2, new CharTransitionLabel('2'));
+        specClock1.addTransition(q1B, q2, new CharTransitionLabel('3'));
+        specClock1.addTransition(q1B, q2, new CharTransitionLabel('4'));
+        specClock1.addTransition(q1B, q2, new CharTransitionLabel('5'));
+        specClock1.addTransition(q1B, q2, new CharTransitionLabel('6'));
+        specClock1.addTransition(q1B, q2, new CharTransitionLabel('7'));
+        specClock1.addTransition(q1B, q2, new CharTransitionLabel('8'));
+        specClock1.addTransition(q1B, q2, new CharTransitionLabel('9'));
+
+        specClock1.addTransition(q1C, q2, new CharTransitionLabel('0'));
+        specClock1.addTransition(q1C, q2, new CharTransitionLabel('1'));
+        specClock1.addTransition(q1C, q2, new CharTransitionLabel('2'));
+        specClock1.addTransition(q1C, q2, new CharTransitionLabel('3'));
+
+        specClock1.addTransition(q2, q3, new CharTransitionLabel(':'));
+        specClock1.addTransition(q1A, q3, new CharTransitionLabel(':'));
+        specClock1.addTransition(q1B, q3, new CharTransitionLabel(':'));
+        specClock1.addTransition(q1C, q3, new CharTransitionLabel(':'));
+
+        specClock1.addTransition(q3, q4, new CharTransitionLabel('0'));
+        specClock1.addTransition(q3, q4, new CharTransitionLabel('1'));
+        specClock1.addTransition(q3, q4, new CharTransitionLabel('2'));
+        specClock1.addTransition(q3, q4, new CharTransitionLabel('3'));
+        specClock1.addTransition(q3, q4, new CharTransitionLabel('4'));
+        specClock1.addTransition(q3, q4, new CharTransitionLabel('5'));
+
+        specClock1.addTransition(q4, q5, new CharTransitionLabel('0'));
+        specClock1.addTransition(q4, q5, new CharTransitionLabel('1'));
+        specClock1.addTransition(q4, q5, new CharTransitionLabel('2'));
+        specClock1.addTransition(q4, q5, new CharTransitionLabel('3'));
+        specClock1.addTransition(q4, q5, new CharTransitionLabel('4'));
+        specClock1.addTransition(q4, q5, new CharTransitionLabel('5'));
+        specClock1.addTransition(q4, q5, new CharTransitionLabel('6'));
+        specClock1.addTransition(q4, q5, new CharTransitionLabel('7'));
+        specClock1.addTransition(q4, q5, new CharTransitionLabel('8'));
+        specClock1.addTransition(q4, q5, new CharTransitionLabel('9'));
+
+        specClock1.markAsInitial(q0);
+        specClock1.markAsFinal(q5);
+
+        AutomatonByRecursion automatonClock = new AutomatonByRecursion(specClock1);
+
+        assertTrue(automatonClock.accepts("11:11"));
+        assertTrue(automatonClock.accepts("23:59"));
+        assertTrue(automatonClock.accepts("0:00"));
+        assertTrue(automatonClock.accepts("3:45"));
+        assertTrue(automatonClock.accepts("03:45"));
+        assertTrue(automatonClock.accepts("15:45"));
+        assertTrue(automatonClock.accepts("12:00"));
+        assertTrue(automatonClock.accepts("00:00"));
+        assertTrue(automatonClock.accepts("19:45"));
+        assertTrue(automatonClock.accepts("1:00"));
+        assertTrue(automatonClock.accepts("20:59"));
+
+
+        assertFalse(automatonClock.accepts("40:10"));
+        assertFalse(automatonClock.accepts("10:60"));
+        assertFalse(automatonClock.accepts("24:10"));
+        assertFalse(automatonClock.accepts("0:1:0"));
+        assertFalse(automatonClock.accepts(":3:10"));
+        assertFalse(automatonClock.accepts("1:10-"));
+        assertFalse(automatonClock.accepts("2,10"));
+        assertFalse(automatonClock.accepts("25:10"));
+        assertFalse(automatonClock.accepts(""));
+        assertFalse(automatonClock.accepts("\n"));
+        assertFalse(automatonClock.accepts(":::::"));
+        assertFalse(automatonClock.accepts("666666"));
+        assertFalse(automatonClock.accepts("true"));
+    }
 }

@@ -13,6 +13,42 @@ abstract class TransitionLabel {
     public abstract boolean canBeEpsilon();
 
     /**
+     * Zwraca true, jeśli z przejściem jest związany kontekstowy warunek.
+     *
+     * Owijka do metody doIsContextual - to metodę doIsContextual
+     * należy przedefiniować w konkretnych klasach.
+     */
+    public final boolean isContextual() {
+        boolean contextual = doIsContextual();
+
+        // Kontekstowy warunek może dotyczyć wyłącznie epsilon-przejść.
+        // (Może być natomiast epsilon-przejście bez kontekstowego warunku).
+        if (contextual && !canBeEpsilon())
+            throw new IllegalStateException();
+
+        return contextual;
+    }
+
+    /**
+     * Sprawdza kontekstowy warunek, kontekst jest określony przez
+     * napis s i pozycję w tym napisie.
+     *
+     * Owijka do metody doCheckContext - to metodę doIsContextual
+     * należy przedefiniować w konkretnych klasach.
+     */
+    public final boolean checkContext(String s, int position) {
+        boolean contextOk = doCheckContext(s, position);
+
+        // Jeśli wg metody isContextual z przejściem nie jest
+        // związany kontekstowy warunek doCheckContext powinno
+        // zawsze zwracać true.
+        if (!contextOk && !isContextual())
+            throw new IllegalStateException();
+
+        return contextOk;
+    }
+
+    /**
      * Zwraca true gdy przejście może nastąpić po znaku 'c'.
      */
     public abstract boolean canAcceptCharacter(char c);
@@ -52,6 +88,14 @@ abstract class TransitionLabel {
     }
 
     protected abstract TransitionLabel intersectWith(TransitionLabel label);
+
+    protected boolean doIsContextual() {
+        return false;
+    }
+
+    protected boolean doCheckContext(String s, int position) {
+        return true;
+    }
 
     static class CannotDetermineIntersectionException extends UnsupportedOperationException {
     }

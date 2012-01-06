@@ -37,9 +37,9 @@ public class SingleCharacterOperator extends NullaryRegexpOperator {
         return new NaiveAutomatonSpecification().makeOneTransitionAutomaton(character);
     }
 
-     /**
-      * Fabryka operatora.
-      */
+    /**
+     * Fabryka operatora.
+     */
     public static class Factory extends NullaryRegexpOperatorFactory {
 
         @Override

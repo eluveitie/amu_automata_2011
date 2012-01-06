@@ -5,15 +5,20 @@ import pl.edu.amu.wmi.daut.base.AutomatonSpecification;
 import java.util.List;
 
 /**
- * Klasa reprezentująca operator '|' z wyrażeń regularnych (alternatywa).
+ * Klasa reprezentująca niejawny, dwuargumentowy operator konkatenacji.
  */
-public class AlternativeOperator extends BinaryRegexpOperator {
+public class ConcatenationOperator extends BinaryRegexpOperator {
+
+    /**
+     * Konstruktor domyslny.
+     */
+    public ConcatenationOperator() { }
 
     @Override
     public final AutomatonSpecification createAutomatonFromTwoAutomata(
             AutomatonSpecification leftSubautomaton,
             AutomatonSpecification rightSubautomaton) {
-        return AutomataOperations.sum(leftSubautomaton, rightSubautomaton);
+        return AutomataOperations.concatenation(leftSubautomaton, rightSubautomaton);
     }
 
     /**
@@ -27,8 +32,7 @@ public class AlternativeOperator extends BinaryRegexpOperator {
         }
 
         protected RegexpOperator doCreateOperator(List<String> params) {
-            return new AlternativeOperator();
+            return new ConcatenationOperator();
         }
     }
-
 }

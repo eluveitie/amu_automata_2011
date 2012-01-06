@@ -12,10 +12,7 @@ import pl.edu.amu.wmi.daut.re.AlternativeOperator.Factory;
 /**
  * Test klasy AlternativeOperator.
  */
-
 public class TestAlternativeOperator extends TestCase {
-
-    static final int BASE = 0;
 
     /**
      * Test automatów:
@@ -110,8 +107,7 @@ public class TestAlternativeOperator extends TestCase {
         Factory factory = new Factory();
         ArrayList<String> params = new ArrayList<String>();
 
-        assertEquals(factory.numberOfParams(), BASE);
-        assertEquals(factory.doCreateOperator(params).getClass(),
-        new AlternativeOperator().getClass());
+        assertEquals(factory.createOperator(params).getClass(),
+            new AlternativeOperator().getClass());
     }
 }

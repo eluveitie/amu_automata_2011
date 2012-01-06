@@ -139,10 +139,10 @@ public class TestDeterministicAutomaton extends TestCase {
         automaton.addTransition(state2, state4, new CharTransitionLabel('a'));
         automaton.addTransition(state3, state5, new CharTransitionLabel('a'));
 
-        automaton2 = automaton.makeMinimal();
+        automaton2.makeMinimal(automaton, "ab");
         int states = automaton2.countStates();
 
-        assertEquals(4, states);
+       assertEquals(3, states);
 
         AutomatonByRecursion automaton3 = new AutomatonByRecursion(automaton2);
 
@@ -171,15 +171,16 @@ public class TestDeterministicAutomaton extends TestCase {
         automaton4.addTransition(states4, states1, new CharTransitionLabel('a'));
         automaton4.addLoop(states4, new CharTransitionLabel('b'));
 
-        automaton5 = automaton4.makeMinimal();
+        automaton5.makeMinimal(automaton4, "ab");
 
         AutomatonByRecursion automaton6 = new AutomatonByRecursion(automaton5);
 
 
-        assertTrue(automaton6.accepts("bbbbbbbbbaaaa"));
-        assertTrue(automaton6.accepts("aaaaaaaa"));
+
+        assertTrue(automaton6.accepts("bbbbbbbbbaaa"));
+        assertTrue(automaton6.accepts("aaaaaaaaaaaaaaaaa"));
         assertTrue(automaton6.accepts("bbbaa"));
-        assertTrue(automaton6.accepts("babababababaa"));
+        assertTrue(automaton6.accepts("babababababaaaaaaaaaaaaaaaaaaaaa"));
         assertEquals(automaton5.countStates(), 3);
         //---------------------------------------------------------
 
@@ -189,6 +190,7 @@ public class TestDeterministicAutomaton extends TestCase {
         State statez4 = automaton7.addState();
         State statez5 = automaton7.addState();
         State statez6 = automaton7.addState();
+        State statez7 = automaton7.addState();
 
         automaton7.markAsInitial(statez1);
         automaton7.markAsFinal(statez4);
@@ -202,12 +204,14 @@ public class TestDeterministicAutomaton extends TestCase {
         automaton7.addLoop(statez4, new CharTransitionLabel('a'));
         automaton7.addLoop(statez4, new CharTransitionLabel('b'));
         automaton7.addTransition(statez5, statez2, new CharTransitionLabel('a'));
-        //automaton7.addLoop(statez5, new CharTransitionLabel('b'));
         automaton7.addTransition(statez5, statez6, new CharTransitionLabel('b'));
         automaton7.addTransition(statez6, statez2, new CharTransitionLabel('a'));
         automaton7.addLoop(statez6, new CharTransitionLabel('b'));
+        automaton7.addTransition(statez6, statez7, new CharTransitionLabel('b'));
+        automaton7.addTransition(statez7, statez2, new CharTransitionLabel('a'));
+        automaton7.addLoop(statez7, new CharTransitionLabel('b'));
 
-        automaton8 = automaton7.makeMinimal();
+        automaton8.makeMinimal(automaton7, "ab");
 
         AutomatonByRecursion automaton9 = new AutomatonByRecursion(automaton8);
 
@@ -217,7 +221,9 @@ public class TestDeterministicAutomaton extends TestCase {
         assertTrue(automaton9.accepts("aaaaaababbbbbbbabbb"));
         assertTrue(automaton9.accepts("baaba"));
         assertTrue(automaton9.accepts("ababbb"));
+        assertFalse(automaton9.accepts("aaaaaaaaaaaaaa"));
+        assertFalse(automaton9.accepts("bbbb"));
+        assertFalse(automaton9.accepts("aaaab"));
         assertEquals(4, automaton8.countStates());
     }
 }
-

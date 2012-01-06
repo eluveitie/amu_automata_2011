@@ -100,13 +100,11 @@ public class TestRegexpOperatorManager extends TestCase {
         assertEquals(range, manager.getSeparators("{n,m}"));
         assertEquals(single, manager.getSeparators("s"));
         assertNull(manager.getSeparators("z"));
-
     }
 
     /**
      * Test metody getOperatorsForStringPrefix.
      */
-
     public final void testGetOperatorsForStringPrefix() {
 
         RegexpOperatorManager manager = new RegexpOperatorManager();
@@ -133,6 +131,23 @@ public class TestRegexpOperatorManager extends TestCase {
 
         string = manager.getOperatorsForStringPrefix(".");
         assertEquals(Arrays.<String>asList("*", "{n,m}", "s", ".", "?"), string);
+    }
 
+    /**
+     * Test z getOperatorsForStringPrefix separatorem o długości dwa znaki.
+     */
+    public final void testGetOperatorsForStringPrefixWithTwoChars() {
+
+        RegexpOperatorManager manager = new RegexpOperatorManager();
+
+        manager.addOperator("!", new SingleCharacterOperator.Factory(),
+                Arrays.<String>asList("!"));
+        manager.addOperator("!!", new SingleCharacterOperator.Factory(),
+                Arrays.<String>asList("!!"));
+
+        List<String> string = new ArrayList<String>();
+
+        string = manager.getOperatorsForStringPrefix("!!bla!bla");
+        assertEquals(Arrays.<String>asList("!!"), string);
     }
 }

@@ -13,7 +13,7 @@ public class TestAutomatonUtilities extends TestCase {
     /**
      * Test metody getAlphabet, sprawdza czy zwraca dwuelementowy alfabet.
     */
-    public final void test1GetAlphabet() {
+    public final void testAlphabetForSmallSetFromSuperset() {
 
         final NaiveAutomatonSpecification spec = new NaiveAutomatonSpecification();
 
@@ -54,7 +54,7 @@ public class TestAutomatonUtilities extends TestCase {
     /**
      * Drugi test, sprawdza alfabet przy powtarzajacych sie.
     */
-    public final void test2GetAlphabet() {
+    public final void testAlphabetForSameLabels() {
 
         final NaiveAutomatonSpecification spec = new NaiveAutomatonSpecification();
 
@@ -91,7 +91,7 @@ public class TestAutomatonUtilities extends TestCase {
      /**
       * Trzeci test, sprawdza alfabet pusty.
      */
-     public final void test3GetAlphabet() {
+     public final void testAlphabetEmpty() {
 
         final NaiveAutomatonSpecification spec = new NaiveAutomatonSpecification();
 
@@ -122,7 +122,7 @@ public class TestAutomatonUtilities extends TestCase {
     /**
      * Czwarty test, sprawdza alfabet rowny calemu zbiorowi.
     */
-    public final void test4GetAlphabet() {
+    public final void testAlphabetFullSet() {
 
         final NaiveAutomatonSpecification spec = new NaiveAutomatonSpecification();
 
@@ -173,7 +173,7 @@ public class TestAutomatonUtilities extends TestCase {
     /**
      * Piaty test, sprawdza uzycie elementu nie nalezacego do nadzbioru.
     */
-    public final void test5GetAlphabet() {
+    public final void testAlphabetElementFromOutsideSuperset() {
 
         final NaiveAutomatonSpecification spec = new NaiveAutomatonSpecification();
 

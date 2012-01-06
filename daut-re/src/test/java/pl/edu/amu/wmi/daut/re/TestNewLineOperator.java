@@ -4,37 +4,31 @@ import java.util.ArrayList;
 import pl.edu.amu.wmi.daut.base.AutomatonSpecification;
 import junit.framework.TestCase;
 import pl.edu.amu.wmi.daut.base.AutomatonByRecursion;
-import pl.edu.amu.wmi.daut.re.DigitOperator.Factory;
+import pl.edu.amu.wmi.daut.re.NewLineOperator.Factory;
 
 /**
- *
- * Test klasy DigitOperator.
+ * Testy klasy NewLineOperator.
  */
-public class TestDigitOperator extends TestCase {
+public class TestNewLineOperator extends TestCase {
 
     /**
-     * Test metody createFixedAutomaton.
+     * Test metody CreateFixedAutomaton.
      */
     public void testCreateFixedAutomaton() {
 
-        DigitOperator operator = new DigitOperator();
+        NewLineOperator operator = new NewLineOperator();
         AutomatonSpecification spec = operator.createFixedAutomaton();
         assertFalse(spec.isEmpty());
         assertFalse(spec.acceptEmptyWord());
 
         AutomatonByRecursion automaton = new AutomatonByRecursion(spec);
-        assertTrue(automaton.accepts("0"));
-        assertTrue(automaton.accepts("9"));
-        assertTrue(automaton.accepts("1"));
-        assertTrue(automaton.accepts("7"));
-        assertTrue(automaton.accepts("5"));
-        assertFalse(automaton.accepts(""));
+        assertTrue(automaton.accepts("\n"));
         assertFalse(automaton.accepts("a"));
-        assertFalse(automaton.accepts("b"));
-        assertFalse(automaton.accepts("93"));
-        assertFalse(automaton.accepts("100"));
-        assertFalse(automaton.accepts("207"));
-
+        assertFalse(automaton.accepts("%"));
+        assertFalse(automaton.accepts("\t"));
+        assertFalse(automaton.accepts(" "));
+        assertFalse(automaton.accepts(""));
+        assertFalse(automaton.accepts("\r"));
     }
 
     /**
@@ -43,7 +37,6 @@ public class TestDigitOperator extends TestCase {
     public void testFactory() {
 
         Factory factory = new Factory();
-        assertEquals(factory.numberOfParams(), 0);
         RegexpOperator operator2 = factory.createOperator(new ArrayList<String>());
         int arity = operator2.arity();
         assertEquals(arity, 0);

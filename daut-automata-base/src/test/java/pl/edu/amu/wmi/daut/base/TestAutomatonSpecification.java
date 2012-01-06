@@ -109,7 +109,7 @@ public class TestAutomatonSpecification extends TestCase {
     }
 
     /**
-     * Test metody countStates.
+     * Test metody countTransitions.
      */
     public final void testCountTransitions() {
         NaiveAutomatonSpecification spec = new NaiveAutomatonSpecification();
