@@ -404,4 +404,55 @@ public class TestAutomataOperations extends TestCase {
             assertFalse(reversedAutomaton.accepts(word));
         }
     }
+
+     /**
+     * Test sprawdza, czy odwracanie automatu działa (C).
+     */
+    public final void testInversionC() {
+        List<String> words = new ArrayList<String>();
+        words.add("ab");
+        words.add("ba");
+        words.add("caa");
+        words.add("bbba");
+        words.add("bbb");
+        words.add("bab");
+        words.add("abb");
+        words.add("aaa");
+        words.add("a");
+        words.add("b");
+        words.add("");
+
+        NaiveAutomatonSpecification automatonA = new NaiveAutomatonSpecification();
+        State q0 = automatonA.addState();
+        State q1 = automatonA.addState();
+        automatonF.addTransition(q0, q1, new EpsilonTransitionLabel());
+        automatonA.markAsInitial(q0);
+        automatonA.markAsFinal(q1);
+
+        AutomatonSpecification automatonB = AutomataOperations.reverseLanguageAutomaton(automatonA);
+
+        NondeterministicAutomatonByThompsonApproach originalAutomaton = new
+                NondeterministicAutomatonByThompsonApproach(automatonA);
+
+        NondeterministicAutomatonByThompsonApproach reversedAutomaton = new
+                NondeterministicAutomatonByThompsonApproach(automatonB);
+
+        List<String> wordsToAccept = new ArrayList<String>();
+        List<String> wordsToReject = new ArrayList<String>();
+
+        for (String word : words) {
+            String reversedWord = new StringBuffer(word).reverse().toString();
+            if (originalAutomaton.accepts(word))
+                wordsToAccept.add(reversedWord);
+            else
+                wordsToReject.add(reversedWord);
+        }
+
+        for (String word : wordsToAccept) {
+            assertTrue(reversedAutomaton.accepts(word));
+        }
+        for (String word : wordsToReject) {
+            assertFalse(reversedAutomaton.accepts(word));
+        }
+    }
 }
