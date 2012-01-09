@@ -611,7 +611,7 @@ public class AutomataOperations {
                 }
             }
             PowerSetElement.resetNumber();
-            //resultDfa.deleteUselessStates();
+            resultDfa.deleteUselessStates();
         } else {
             throw new StructureException();
         }
