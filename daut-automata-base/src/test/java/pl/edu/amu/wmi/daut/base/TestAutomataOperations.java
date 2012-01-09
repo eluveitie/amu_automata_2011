@@ -425,7 +425,7 @@ public class TestAutomataOperations extends TestCase {
         NaiveAutomatonSpecification automatonA = new NaiveAutomatonSpecification();
         State q0 = automatonA.addState();
         State q1 = automatonA.addState();
-        automatonF.addTransition(q0, q1, new EpsilonTransitionLabel());
+        automatonA.addTransition(q0, q1, new EpsilonTransitionLabel());
         automatonA.markAsInitial(q0);
         automatonA.markAsFinal(q1);
 
